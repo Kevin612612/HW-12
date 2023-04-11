@@ -14,7 +14,7 @@ import {emailRouter}    from "./routes/email-router";
 import {deviceRouter}   from "./routes/security_devices-router";
 import {testingRouter}  from "./routes/testing-router";
 import {___trainRouter}    from "./routes/___train-router";
-import path from "path";
+import path from "path"
 
 
 export const app = express()
