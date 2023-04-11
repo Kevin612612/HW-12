@@ -1,0 +1,165 @@
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* чтобы растянуть контейнер на всю высоту экрана */
+    font-family: Arial, sans-serif;
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    background-color: #333;
+    color: #fff;
+}
+
+.topside {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.site_name {
+    width: 30%;
+    padding-top: 12px;
+    color: #4CAF50;
+}
+
+.site_name a {
+    color: #ffffff;
+}
+
+.logos {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.topside.logo-1 {
+    float: left;
+    width: 10%;
+    padding-top: 12px;
+}
+
+.topside.logo-2 {
+    float: left;
+    width: 10%;
+    padding-top: 12px;
+}
+
+.topside.logo-3 {
+    float: right;
+    width: 10%;
+    padding-top: 12px;
+}
+
+.auth {
+    width: 25%;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    padding-top: 20px;
+}
+
+.login {
+    width: 50%;
+    padding-top: 12px;
+}
+
+.signin {
+    width: 50%;
+    padding-top: 12px;
+}
+
+.login button {
+    background-color: white;
+    color: black;
+    font-size: 18px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.signin button {
+    background-color: white;
+    color: black;
+    font-size: 18px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+/*-----------------------------------------------------*/
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+nav li {
+    margin-right: 20px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+}
+/*-----------------------------------------------------*/
+.container {
+    display: flex;
+    flex: 1; /* чтобы контейнер занял все доступное пространство по вертикали */
+}
+
+
+
+.sidebar {
+    background-color: #eee;
+    padding: 10px;
+    float: left;
+    width: 20%;
+    height: 500px;
+}
+
+.icons {
+    width: 30px;
+    height: 30px;
+}
+/*---------------------------------------------------------------*/
+.main-block {
+    background-color: #fff;
+    padding: 10px;
+    float: left;
+    width: 80%;
+    height: 500px;
+}
+
+.blog {
+    display: flex;
+    flex-direction: row;
+}
+
+.blogImage {
+    width: 60px;
+    height: 60px;
+}
+
+.images {
+    padding-top: 10px;
+    width: 60px;
+    height: 60px;
+}
+
+.blog-post {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.blog-post h2 {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.blog-post p {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
