@@ -33,25 +33,21 @@ app.set('trust proxy', true)
 
 
 
-app.use(express.static(path.resolve(__dirname, 'static/registration')))
-app.use(express.static(path.resolve(__dirname, 'static/main_page')))
-app.use(express.static(path.resolve(__dirname, 'static/login')))
+app.use(express.static(path.resolve('/Users/antonlazukin/WebstormProjects/HW-12/src/static/registration')))
+app.use(express.static(path.resolve('/Users/antonlazukin/WebstormProjects/HW-12/src/static/main_page')))//join files in folder
+app.use(express.static(path.resolve('/Users/antonlazukin/WebstormProjects/HW-12/src/static/login')))
 
 
 app.get('/', (req: Request, res: Response) => {
-    res.sendFile(__dirname + '/static/main_page/main.html')
-    // res.sendFile(path.resolve(__dirname, 'static/main_page', 'main.html'))
-
+    res.sendFile('/Users/antonlazukin/WebstormProjects/HW-12/src/static/main_page/main.html')
 })
 
 app.get('/log', (req: Request, res: Response) => {
-    // res.sendFile(path.resolve(__dirname, 'static/registration', 'login.html'))
-    res.sendFile(__dirname + '/static/login/login.html')
+    res.sendFile('/Users/antonlazukin/WebstormProjects/HW-12/src/static/login/login.html')
 })
 
 app.get('/registration', (req: Request, res: Response) => {
-    // res.sendFile(path.resolve(__dirname, 'static/registration', 'login.html'))
-    res.sendFile(__dirname + '/static/registration/registration.html')
+    res.sendFile( '/Users/antonlazukin/WebstormProjects/HW-12/src/static/registration/registration.html')
 })
 
 
