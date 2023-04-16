@@ -1,4 +1,3 @@
-
 import express, {Request, Response} from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
@@ -31,23 +30,20 @@ app.use(device.capture())
 
 app.set('trust proxy', true)
 
+const pathLocal = '/Users/antonlazukin/WebstormProjects/HW-12/src/static'
 
-
-app.use(express.static(path.resolve('/Users/antonlazukin/WebstormProjects/HW-12/src/static/registration')))
-app.use(express.static(path.resolve('/Users/antonlazukin/WebstormProjects/HW-12/src/static/main_page')))//join files in folder
-app.use(express.static(path.resolve('/Users/antonlazukin/WebstormProjects/HW-12/src/static/login')))
-
+app.use(express.static(path.resolve(pathLocal+ '/registration')))
+app.use(express.static(path.resolve(pathLocal + '/main_page')))//join files in folder
+app.use(express.static(path.resolve(pathLocal + '/login')))
 
 app.get('/', (req: Request, res: Response) => {
-    res.sendFile('/Users/antonlazukin/WebstormProjects/HW-12/src/static/main_page/main.html')
+    res.sendFile(pathLocal + '/main_page/main.html')
 })
-
 app.get('/log', (req: Request, res: Response) => {
-    res.sendFile('/Users/antonlazukin/WebstormProjects/HW-12/src/static/login/login.html')
+    res.sendFile(pathLocal + '/login/login.html')
 })
-
 app.get('/registration', (req: Request, res: Response) => {
-    res.sendFile( '/Users/antonlazukin/WebstormProjects/HW-12/src/static/registration/registration.html')
+    res.sendFile( pathLocal + '/registration/registration.html')
 })
 
 
