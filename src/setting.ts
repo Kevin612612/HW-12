@@ -34,9 +34,9 @@ app.set('trust proxy', true)
 // const pathToStatic = '/Users/antonlazukin/WebstormProjects/HW-12/src' //localhost
 const pathToStatic = __dirname // vercel
 
-app.use(express.static(path.resolve(pathToStatic+ '/registration')))
-app.use(express.static(path.resolve(pathToStatic + '/main_page')))//join files in folder
-app.use(express.static(path.resolve(pathToStatic + '/login')))
+app.use(express.static(path.resolve(pathToStatic+ 'static/registration')))
+app.use(express.static(path.resolve(pathToStatic + 'static/main_page')))
+app.use(express.static(path.resolve(pathToStatic + 'static/login')))
 
 app.get('/', (req: Request, res: Response) => {
     res.sendFile(pathToStatic + '/static/main_page/main.html')
