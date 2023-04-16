@@ -37,7 +37,6 @@ app.use(express.static(path.resolve(pathLocal + '/main_page')))//join files in f
 app.use(express.static(path.resolve(pathLocal + '/login')))
 
 app.get('/', (req: Request, res: Response) => {
-    console.log(__dirname)
     res.sendFile(pathLocal + '/main_page/main.html')
 })
 app.get('/log', (req: Request, res: Response) => {
