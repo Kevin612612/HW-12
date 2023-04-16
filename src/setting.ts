@@ -1,0 +1,80 @@
+
+import express, {Request, Response} from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+// @ts-ignore
+import device from 'express-device'
+import {authRouter}     from "./routes/auth-router";
+import {usersRouter}    from "./routes/users-router";
+import {blogsRouter}    from "./routes/blogs-router";
+import {postsRouter}    from "./routes/posts-router";
+import {commentsRouter} from "./routes/comments-router";
+import {emailRouter}    from "./routes/email-router";
+import {deviceRouter}   from "./routes/security_devices-router";
+import {testingRouter}  from "./routes/testing-router";
+import {___trainRouter}    from "./routes/___train-router";
+import path from "path"
+
+
+export const app = express()
+
+const corsMiddleware = cors()
+app.use(corsMiddleware)
+
+const jsonBodyMiddleware = bodyParser.json()
+app.use(jsonBodyMiddleware)
+
+app.use(cookieParser())
+
+app.use(device.capture())
+
+app.set('trust proxy', true)
+
+
+
+app.use(express.static(path.resolve(__dirname, 'static/registration')))
+app.use(express.static(path.resolve(__dirname, 'static/main_page')))
+app.use(express.static(path.resolve(__dirname, 'static/login')))
+
+
+app.get('/', (req: Request, res: Response) => {
+    res.sendFile(__dirname + '/static/main_page/main.html')
+    // res.sendFile(path.resolve(__dirname, 'static/main_page', 'main.html'))
+
+})
+
+app.get('/log', (req: Request, res: Response) => {
+    // res.sendFile(path.resolve(__dirname, 'static/registration', 'login.html'))
+    res.sendFile(__dirname + '/static/login/login.html')
+})
+
+app.get('/registration', (req: Request, res: Response) => {
+    // res.sendFile(path.resolve(__dirname, 'static/registration', 'login.html'))
+    res.sendFile(__dirname + '/static/registration/registration.html')
+})
+
+
+
+
+app.get('/page1', (req: Request, res: Response) => {
+    res.sendFile(path.resolve(__dirname, 'static/page1', 'page1.html'));
+})
+
+app.get('/download', (req: Request, res: Response) => {
+    res.download(path.resolve(__dirname, 'static/page1', 'page1.html'));
+})
+
+
+//**ROUTES*/
+app.use('/auth', authRouter)
+app.use('/security', deviceRouter)
+app.use('/users', usersRouter)
+app.use('/blogs', blogsRouter)
+app.use('/posts', postsRouter)
+app.use('/comments', commentsRouter)
+app.use('/email', emailRouter)
+app.use('/testing', testingRouter)
+
+app.use('/train', ___trainRouter) //draft
+
