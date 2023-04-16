@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="main.css">
+    <link rel="icon" type="image/png" href="images/html-file.png">
+
 </head>
 
 <body>
@@ -43,39 +45,80 @@
 </header>
 
 <div class="container">
+    <!--==============SIDEBAR===============-->
+    <aside>
+        <div class="sidebar">
+            <a href="" class="blog_sidebar">
+                <img class="icons" src="images/blogging.png" alt="">
+                <h3>Blogs</h3>
+            </a>
+            <a href="">
+                <img class="icons" src="images/posts.png" alt="">
+                <h3>Posts</h3>
+            </a>
+            <a href="">
 
-    <div class="sidebar">
-        <div class="blogs">
-            <img class="icons" src="blogging.png" alt="">
-            <a href="" id="blogs">Blogs</a>
+
+            </a>
+            <a href="">
+                <img class="icons" src="images/logout.png" alt="">
+                <h3>Log out</h3>
+            </a>
         </div>
-        <div class="posts">
-            <img class="icons" src="posts.png" alt="">
-            <a href="" id="posts">Posts</a>
+    </aside>
+
+    <!--==============INFORMATION-FIELD===============-->
+    <div class="information-field">
+        <!--===================BLOG-ID===================*/-->
+        <form>
+            <label for="blog-name">Blog name:</label>
+            <input type="text" id="blog-name" name="id" required>
+            <br>
+            <button type="submit" id="blog-name-button">Get Blog</button>
+        </form>
+        <!--===================MAIN-BLOCK===================*/-->
+        <div class="main-block">
+            <div class="blog">
+                <div class="blogImage">
+                    <img class="images" src="images/photo.png" alt="">
+                </div>
+                <div class="blogContent">
+                    <h2>Blog Post Title</h2>
+                    <p>Here's some text about the blog post.</p>
+                </div>
+            </div>
+
         </div>
     </div>
 
-    <div id="main-block">
-        <div class="blog">
-            <div class="blogImage">
-                <img class="images" src="photo.png" alt="">
-            </div>
-            <div class="blogContent">
-                <h2>Blog Post Title</h2>
-                <p>Here's some text about the blog post.</p>
-            </div>
-        </div>
-
-
-
-    </div>
 
 </div>
 
 <footer>
     <p>&copy; 2023 My Blog</p>
+    <!--    <p class="social">-->
+    <!--        <a class="facebook" href="https://www.facebook.com/stcjaguars" rel="noopener noreferrer" target="_blank"-->
+    <!--           title="Facebook">-->
+    <!--            <img alt="Facebook" height="32"-->
+    <!--                 src="https://global.southtexascollege.edu/graphics/icons/social/facebook.png" width="32"> </a>-->
+    <!--        <a class="twitter" href="https://twitter.com/stcjaguars" rel="noopener noreferrer" target="_blank"-->
+    <!--           title="Twitter">-->
+    <!--            <img alt="Twitter" height="32" src="https://global.southtexascollege.edu/graphics/icons/social/twitter.png"-->
+    <!--                 width="32"> </a>-->
+    <!--        <a class="youtube" href="https://www.youtube.com/southtexascollege"-->
+    <!--           rel="noopener noreferrer" target="_blank" title="YouTube"> <img alt="YouTube"-->
+    <!--                                                                           height="32"-->
+    <!--                                                                           src="https://global.southtexascollege.edu/graphics/icons/social/youtube.png"-->
+    <!--                                                                           width="32"> </a>-->
+    <!--        <a-->
+    <!--            class="instagram" href="https://instagram.com/stcjaguars/" rel="noopener noreferrer" target="_blank"-->
+    <!--            title="Instagram"> <img alt="Instagram" height="32"-->
+    <!--                                    src="https://global.southtexascollege.edu/graphics/icons/social/instagram.png"-->
+    <!--                                    width="32"> </a>-->
+    <!--    </p>-->
 </footer>
 
-<script src="main.js"></script>
+<script src="allBlogs.js"></script>
+<script src="blogByName.js"></script>
 </body>
 </html>
