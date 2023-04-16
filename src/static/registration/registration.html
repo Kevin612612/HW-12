@@ -1,0 +1,80 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Registration</title>
+    <link rel="stylesheet" href="registration.css">
+</head>
+
+<body>
+
+
+<header>
+    <div class="topside">
+        <div class="site_name">
+            <a href="/"><h1>Blogs</h1></a>
+        </div>
+
+        <div class="logos">
+            <div class="logo-1"><img src="" alt=""></div>
+            <div class="logo-2"></div>
+            <div class="logo-3"></div>
+        </div>
+
+        <div class="auth">
+            <div class="login">
+                <button><a href="/log">Login</a></button>
+            </div>
+
+            <div class="signin">
+                <button><a href="/registration">Sign in</a></button>
+            </div>
+        </div>
+
+
+    </div>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+
+
+
+<form method="post" action="/register" id="registration-form">
+    <div class="username">
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" required>
+    </div>
+
+    <div class="email">
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email" required>
+    </div>
+
+    <div class="password">
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" required>
+    </div>
+
+    <div class="confirm-password">
+        <label for="confirm-password">Confirm Password:</label>
+        <input type="password" name="confirm-password" id="confirm-password" required>
+    </div>
+
+    <button type="submit">Register</button>
+</form>
+
+
+
+<script src="registration.js"></script>
+
+</body>
+</html>
