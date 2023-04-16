@@ -1,19 +1,18 @@
-
 import express, {Request, Response} from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 // @ts-ignore
 import device from 'express-device'
-import {authRouter}     from "./routes/auth-router";
-import {usersRouter}    from "./routes/users-router";
-import {blogsRouter}    from "./routes/blogs-router";
-import {postsRouter}    from "./routes/posts-router";
+import {authRouter} from "./routes/auth-router";
+import {usersRouter} from "./routes/users-router";
+import {blogsRouter} from "./routes/blogs-router";
+import {postsRouter} from "./routes/posts-router";
 import {commentsRouter} from "./routes/comments-router";
-import {emailRouter}    from "./routes/email-router";
-import {deviceRouter}   from "./routes/security_devices-router";
-import {testingRouter}  from "./routes/testing-router";
-import {___trainRouter}    from "./routes/___train-router";
+import {emailRouter} from "./routes/email-router";
+import {deviceRouter} from "./routes/security_devices-router";
+import {testingRouter} from "./routes/testing-router";
+import {___trainRouter} from "./routes/___train-router";
 import path from "path"
 
 
@@ -34,9 +33,9 @@ app.set('trust proxy', true)
 // const pathToStatic = '/Users/antonlazukin/WebstormProjects/HW-12/src' //localhost
 const pathToStatic = __dirname // vercel
 
-app.use(express.static(path.resolve(pathToStatic+ 'static/registration')))
-app.use(express.static(path.resolve(pathToStatic + 'static/main_page')))
-app.use(express.static(path.resolve(pathToStatic + 'static/login')))
+app.use(express.static(path.resolve(pathToStatic, 'static/registration')))
+app.use(express.static(path.resolve(pathToStatic, 'static/main_page')))
+app.use(express.static(path.resolve(pathToStatic, 'static/login')))
 
 app.get('/', (req: Request, res: Response) => {
     res.sendFile(pathToStatic + '/static/main_page/main.html')
@@ -45,10 +44,8 @@ app.get('/log', (req: Request, res: Response) => {
     res.sendFile(pathToStatic + '/static/login/login.html')
 })
 app.get('/registration', (req: Request, res: Response) => {
-    res.sendFile( pathToStatic + '/static/registration/registration.html')
+    res.sendFile(pathToStatic + '/static/registration/registration.html')
 })
-
-
 
 
 app.get('/page1', (req: Request, res: Response) => {
