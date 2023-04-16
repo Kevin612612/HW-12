@@ -30,23 +30,29 @@ app.use(device.capture())
 
 app.set('trust proxy', true)
 
-const pathLocal = '/Users/antonlazukin/WebstormProjects/HW-12/src/static'
+// const pathToStatic = '/Users/antonlazukin/WebstormProjects/HW-12/src'
+const pathToStatic = __dirname
 
-app.use(express.static(path.resolve(pathLocal+ '/registration')))
-app.use(express.static(path.resolve(pathLocal + '/main_page')))//join files in folder
-app.use(express.static(path.resolve(pathLocal + '/login')))
+app.use(express.static(path.resolve(pathToStatic+ '/registration')))
+app.use(express.static(path.resolve(pathToStatic + '/main_page')))//join files in folder
+app.use(express.static(path.resolve(pathToStatic + '/login')))
 
 app.get('/', (req: Request, res: Response) => {
-    res.sendFile(pathLocal + '/main_page/main.html')
+    res.sendFile(pathToStatic + '/main_page/main.html')
 })
 app.get('/log', (req: Request, res: Response) => {
-    res.sendFile(pathLocal + '/login/login.html')
+    res.sendFile(pathToStatic + '/login/login.html')
 })
 app.get('/registration', (req: Request, res: Response) => {
-    res.sendFile( pathLocal + '/registration/registration.html')
+    res.sendFile( pathToStatic + '/registration/registration.html')
 })
 
-
+// pathToStatic + '/static/main_page/main.html' // local
+// pathToStatic + '/static/login/login.html' // local
+// pathToStatic + '/static/registration/registration.html' // local
+// __dirname + '/static/main_page/main.html' // vercel
+// __dirname + '/static/login/login.html' // vercel
+// __dirname + '/static/registration/registration.html' // vercel
 
 
 app.get('/page1', (req: Request, res: Response) => {
