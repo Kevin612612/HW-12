@@ -31,7 +31,7 @@ app.use(device.capture())
 
 app.set('trust proxy', true)
 
-// const pathToStatic = '/Users/antonlazukin/WebstormProjects/HW-12/src' //local
+// const pathToStatic = '/Users/antonlazukin/WebstormProjects/HW-12/src' //localhost
 const pathToStatic = __dirname // vercel
 
 app.use(express.static(path.resolve(pathToStatic+ '/registration')))
