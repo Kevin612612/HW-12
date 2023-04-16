@@ -114,6 +114,12 @@ export class BlogBusinessLayer {
         return result ? result : 404
     }
 
+    //(5-1) method take blog by name
+    async findBlogByName(name: string): Promise<blogViewModel | number> {
+        const result = await this.blogsRepository.findBlogByName(name)
+        return result ? result : 404
+    }
+
 
     //(6) method updates blog by blogId
     async updateBlogById(blogId: string, name: string, description: string, websiteUrl: string): Promise<boolean | number | string[]> {
@@ -141,4 +147,3 @@ export class BlogBusinessLayer {
 }
 
 
-// export const blogBusinessLayer = new BlogBusinessLayer()

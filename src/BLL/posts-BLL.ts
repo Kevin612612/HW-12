@@ -237,5 +237,3 @@ export class PostBusinessLayer {
     }
 }
 
-
-// export const postBusinessLayer = new PostBusinessLayer()

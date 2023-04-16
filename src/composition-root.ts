@@ -37,14 +37,20 @@ const commentsBusinessLayer = new CommentsBusinessLayer(commentsRepository)
 const refreshTokensBusinessLayer = new RefreshTokensBusinessLayer(jwtService, refreshTokensRepository)
 
 
-
-
 export const userController = new UserController(userBusinessLayer)
 export const blogController = new BlogController(blogBusinessLayer, postBusinessLayer)
 export const postController = new PostController(postBusinessLayer)
 export const commentController = new CommentController(commentsBusinessLayer)
-
 export const authController = new AuthController(authBusinessLayer, userBusinessLayer, userRepository, jwtService, emailsManager, refreshTokensRepository)
 export const deviceController = new DeviceController(refreshTokensBusinessLayer, jwtService)
 
+
+
+const objects = [userRepository, blogsRepository, postsRepository, commentsRepository, refreshTokensRepository, jwtService, emailsManager, userBusinessLayer, authBusinessLayer, blogBusinessLayer, postBusinessLayer, commentsBusinessLayer, refreshTokensBusinessLayer, userController, blogController, postController, commentController, authController, deviceController]
+
+export const ioc = {
+    getInstanceOfClass(ClassType: any) {
+        return objects.find(o => o instanceof ClassType)
+    }
+}
 

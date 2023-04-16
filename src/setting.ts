@@ -66,7 +66,7 @@ app.get('/download', (req: Request, res: Response) => {
 })
 
 
-//ROUTES
+//**ROUTES*/
 app.use('/auth', authRouter)
 app.use('/security', deviceRouter)
 app.use('/users', usersRouter)

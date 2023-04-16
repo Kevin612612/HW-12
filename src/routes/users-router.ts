@@ -15,7 +15,12 @@ import {
     usersPasswordValidation
 } from "../middleware/input-validation-middleware";
 import {authorization} from "../middleware/authorization-middleware";
-import {userController} from "../composition-root";
+
+
+import {ioc} from "../composition-root";
+import {UserController} from "../controllers/userController";
+
+const userController: any = ioc.getInstanceOfClass(UserController)
 
 
 export const usersRouter = Router({})

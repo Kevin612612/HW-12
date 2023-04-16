@@ -12,9 +12,9 @@ export class BlogController {
         //INPUT
         const {
             pageNumber = 1,
-            pageSize = 10,
-            sortBy = "createdAt",
-            sortDirection = "desc",
+            pageSize = 9,
+            sortBy = "id",
+            sortDirection = "asc",
             searchNameTerm = ""
         } = req.query;
         //BLL
@@ -57,11 +57,20 @@ export class BlogController {
 
 
     async getBlogById(req: Request, res: Response) {
-        console.log('get blog by id');
         //INPUT
         const blogId = req.params.blogId || "1"
         //BLL
         const blog = await this.blogBusinessLayer.findBlogById(blogId)
+        //RETURN
+        res.status(200).send(blog)
+    }
+
+
+    async getBlogByName(req: Request, res: Response) {
+        //INPUT
+        const name = req.params.name || ""
+        //BLL
+        const blog = await this.blogBusinessLayer.findBlogByName(name)
         //RETURN
         res.status(200).send(blog)
     }

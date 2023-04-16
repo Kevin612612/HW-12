@@ -1,6 +1,4 @@
-
 //Data access Layer
-
 
 
 //(1) allBlogs
@@ -8,10 +6,11 @@
 //(3) findBlogById
 //(4) updateBlogById
 //(5) deleteBlog
+//(6) findBlogByName
+
 
 import {blogViewModel} from "../types/blogs";
 import {BlogModel} from "./mogoose";
-
 
 
 export class BlogsRepository {
@@ -20,10 +19,10 @@ export class BlogsRepository {
     async allBlogs(searchNameTerm: string, sortBy: string, sortDirection: string): Promise<blogViewModel[]> {
         const order = (sortDirection == 'asc') ? 1 : -1; // порядок сортировки
         return BlogModel
-            .find({name : {$regex : searchNameTerm, $options:'i'}})
+            .find({name: {$regex: searchNameTerm, $options: 'i'}})
             .lean()
             .sort({[sortBy]: order})
-            .select({ _id: 0, __v: 0 })
+            .select({_id: 0, __v: 0})
     }
 
 
@@ -36,7 +35,7 @@ export class BlogsRepository {
 
     //(3) method returns blog by blogId
     async findBlogById(blogId: string): Promise<blogViewModel | undefined | null> {
-        const result = await BlogModel.findOne({ id: blogId }, '-_id')
+        const result = await BlogModel.findOne({id: blogId}, '-_id')
         return result
     }
 
@@ -58,6 +57,13 @@ export class BlogsRepository {
     async deleteBlog(id: string): Promise<boolean> {
         const result = await BlogModel.deleteOne({id: id})
         return result.deletedCount === 1
+    }
+
+
+    //(6) method returns blog by name
+    async findBlogByName(name: string): Promise<blogViewModel | undefined> {
+        const result = await BlogModel.findOne({"name": {$regex: name}})
+        return result ? result : undefined
     }
 }
 

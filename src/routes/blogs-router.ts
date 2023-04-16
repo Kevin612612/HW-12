@@ -73,6 +73,12 @@ blogsRouter.get('/:blogId',
 )
 
 
+//(5-1) returns blog by name
+blogsRouter.get('/find/:name',
+    blogController.getBlogByName.bind(blogController)
+)
+
+
 //(6) update existing blog by blogId with InputModel
 blogsRouter.put('/:blogId',
     authorization,
