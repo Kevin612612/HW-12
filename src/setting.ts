@@ -38,7 +38,8 @@ app.use(express.static(path.resolve(pathToStatic, 'static/main_page')))
 app.use(express.static(path.resolve(pathToStatic, 'static/login')))
 
 app.get('/', (req: Request, res: Response) => {
-    res.sendFile(pathToStatic + '/static/main_page/main.html')
+    res.send(__dirname)
+    // res.sendFile(pathToStatic + '/static/main_page/main.html')
 })
 app.get('/log', (req: Request, res: Response) => {
     res.sendFile(pathToStatic + '/static/login/login.html')
