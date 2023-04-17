@@ -1,4 +1,5 @@
- export function create_one_blog_div(name, description) {
+"use strict";
+export function create_one_blog_div(name, description) {
     // create divs
     const blog = document.createElement('div')
     blog.classList.add('blog')

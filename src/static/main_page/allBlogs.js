@@ -1,4 +1,4 @@
-//upload all blogs
+"use strict";
 
 import {create_one_blog_div} from "./functions/create_one_blog_div.js";
 
