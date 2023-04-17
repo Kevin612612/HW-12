@@ -31,15 +31,14 @@ app.use(device.capture())
 app.set('trust proxy', true)
 
 // const pathToStatic = '/Users/antonlazukin/WebstormProjects/HW-12/src' //localhost
-const pathToStatic = __dirname // vercel
+const pathToStatic = '/var/task' // vercel /var/task/src
 
 app.use(express.static(path.resolve(pathToStatic, 'static/registration')))
 app.use(express.static(path.resolve(pathToStatic, 'static/main_page')))
 app.use(express.static(path.resolve(pathToStatic, 'static/login')))
 
 app.get('/', (req: Request, res: Response) => {
-    res.send(__dirname)
-    // res.sendFile(pathToStatic + '/static/main_page/main.html')
+    res.sendFile(pathToStatic + '/static/main_page/main.html')
 })
 app.get('/log', (req: Request, res: Response) => {
     res.sendFile(pathToStatic + '/static/login/login.html')
