@@ -24,16 +24,16 @@ import {createId_1} from "../application/findNonExistId";
 import {CommentModel, PostModel} from "../repositories/mogoose";
 import mongoose from "mongoose";
 import {Comment} from "../classes/commentClass";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 import "reflect-metadata";
 
 @injectable()
 export class PostBusinessLayer {
 
 
-    constructor(protected blogsRepository: BlogsRepository,
-                protected postsRepository: PostsRepository,
-                protected commentsRepository: CommentsRepository) {
+    constructor(@inject(BlogsRepository) protected blogsRepository: BlogsRepository,
+                @inject(PostsRepository) protected postsRepository: PostsRepository,
+                @inject(CommentsRepository) protected commentsRepository: CommentsRepository) {
     }
 
     //(1) this method return all comments by postId
@@ -48,7 +48,7 @@ export class PostBusinessLayer {
         if (foundPost) {
             const allDataComments = await this.commentsRepository.allComments(postId, sortBy, sortDirection)
             const quantityOfDocs = await CommentModel.where({postId: postId}).countDocuments()
-            //filter allDataComments and return array that depends which user send get request
+            //filter allDataComments and return array that depends on which user send get request
             const sortedItems = allDataComments.map(obj => {
                 if (obj.userAssess.find(el => el.userIdLike === userId)) {
                     return {

@@ -2,14 +2,14 @@
 import {RefreshTokensBusinessLayer} from "../BLL/refresh-tokens-BLL";
 import {JWTService} from "../application/jwt-service";
 import {Request, Response} from "express";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 import "reflect-metadata";
 
 @injectable()
 export class DeviceController {
 
-    constructor(protected refreshTokensBusinessLayer: RefreshTokensBusinessLayer,
-                protected jwtService: JWTService) {}
+    constructor(@inject(RefreshTokensBusinessLayer) protected refreshTokensBusinessLayer: RefreshTokensBusinessLayer,
+                @inject(JWTService) protected jwtService: JWTService) {}
 
     async getAllDevices(req: Request, res: Response) {
         //INPUT

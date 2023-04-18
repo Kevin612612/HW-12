@@ -1,13 +1,13 @@
 
 import {PostBusinessLayer} from "../BLL/posts-BLL";
 import {Request, Response} from "express";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 import "reflect-metadata";
 
 @injectable()
 export class PostController {
 
-    constructor(protected postBusinessLayer: PostBusinessLayer) {}
+    constructor(@inject(PostBusinessLayer) protected postBusinessLayer: PostBusinessLayer) {}
 
     async getComments(req: Request, res: Response) {
         //INPUT

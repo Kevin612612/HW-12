@@ -2,14 +2,14 @@
 import {BlogBusinessLayer} from "../BLL/blogs-BLL";
 import {PostBusinessLayer} from "../BLL/posts-BLL";
 import {Request, Response} from "express";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 import "reflect-metadata";
 
 @injectable()
 export class BlogController {
 
-    constructor(protected blogBusinessLayer: BlogBusinessLayer,
-                protected postBusinessLayer: PostBusinessLayer) {}
+    constructor(@inject(BlogBusinessLayer) protected blogBusinessLayer: BlogBusinessLayer,
+                @inject(PostBusinessLayer) protected postBusinessLayer: PostBusinessLayer) {}
 
     async getAllBlogs(req: Request, res: Response) {
         //INPUT

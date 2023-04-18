@@ -48,12 +48,12 @@ export const deviceController = new DeviceController(refreshTokensBusinessLayer,
 
 
 // handmade IoC
-const objects = [userRepository, blogsRepository, postsRepository, commentsRepository, refreshTokensRepository, jwtService, emailsManager, userBusinessLayer, authBusinessLayer, blogBusinessLayer, postBusinessLayer, commentsBusinessLayer, refreshTokensBusinessLayer, userController, blogController, postController, commentController, authController, deviceController]
-export const ioc = {
-    getInstanceOfClass(ClassType: any) {
-        return objects.find(o => o instanceof ClassType)
-    }
-}
+// const objects = [userRepository, blogsRepository, postsRepository, commentsRepository, refreshTokensRepository, jwtService, emailsManager, userBusinessLayer, authBusinessLayer, blogBusinessLayer, postBusinessLayer, commentsBusinessLayer, refreshTokensBusinessLayer, userController, blogController, postController, commentController, authController, deviceController]
+// export const ioc = {
+//     getInstanceOfClass(ClassType: any) {
+//         return objects.find(o => o instanceof ClassType)
+//     }
+// }
 
 //InversifyJS container
 export const container = new Container();
@@ -76,7 +76,6 @@ container.bind<CommentsRepository>(CommentsRepository).to(CommentsRepository);
 
 container.bind<AuthController>(AuthController).to(AuthController);
 container.bind<AuthBusinessLayer>(AuthBusinessLayer).to(AuthBusinessLayer);
-
 
 container.bind<DeviceController>(DeviceController).to(DeviceController);
 

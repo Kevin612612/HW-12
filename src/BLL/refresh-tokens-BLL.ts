@@ -12,14 +12,14 @@
 import {RefreshTokensRepository} from "../repositories/refreshTokens-repository-db";
 import {RefreshTokensTypeSchema} from "../types/refreshTokens";
 import {JWTService} from "../application/jwt-service";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 import "reflect-metadata";
 
 @injectable()
 export class RefreshTokensBusinessLayer {
 
-    constructor (protected jwtService: JWTService,
-                 protected refreshTokensRepository: RefreshTokensRepository) {}
+    constructor (@inject(JWTService) protected jwtService: JWTService,
+                 @inject(RefreshTokensRepository) protected refreshTokensRepository: RefreshTokensRepository) {}
 
     //(1) this method transform all found data and returns them to router
     async allDevices(refreshToken: string): Promise<RefreshTokensTypeSchema> {

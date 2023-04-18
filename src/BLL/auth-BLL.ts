@@ -9,13 +9,13 @@
 import bcrypt from "bcrypt";
 import {userDataModel} from "../types/users";
 import {UserRepository} from "../repositories/users-repository-db";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 import "reflect-metadata";
 
 @injectable()
 export class AuthBusinessLayer {
 
-    constructor (protected userRepository: UserRepository) {}
+    constructor (@inject(UserRepository) protected userRepository: UserRepository) {}
 
     //(1) Does user exist and password correct
     async IsUserExist(loginOrEmail: string, password: string): Promise<userDataModel | undefined> {

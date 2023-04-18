@@ -20,14 +20,14 @@ import {createId_1} from "../application/findNonExistId";
 import {PostsTypeSchema} from "../types/posts";
 import {BlogModel, PostModel} from "../repositories/mogoose";
 import mongoose from "mongoose";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 import "reflect-metadata";
 
 @injectable()
 export class BlogBusinessLayer {
 
-    constructor(protected blogsRepository: BlogsRepository,
-                protected postsRepository: PostsRepository) {}
+    constructor(@inject(BlogsRepository) protected blogsRepository: BlogsRepository,
+                @inject(PostsRepository) protected postsRepository: PostsRepository) {}
 
     //(1) this method transform all found data and returns them to router
     async allBlogs(searchNameTerm: any,

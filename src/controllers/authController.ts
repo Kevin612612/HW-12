@@ -10,18 +10,18 @@ import requestIp from "request-ip";
 import UAParser from "ua-parser-js";
 import {createDeviceId} from "../application/findNonExistId";
 import {blackList} from "../repositories/mongodb";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 import "reflect-metadata";
 
 @injectable()
 export class AuthController {
 
-    constructor(protected authBusinessLayer: AuthBusinessLayer,
-                protected userBusinessLayer: UserBusinessLayer,
-                protected userRepository: UserRepository,
-                protected jwtService: JWTService,
-                protected emailsManager: EmailsManager,
-                protected refreshTokensRepository: RefreshTokensRepository) {
+    constructor(@inject(AuthBusinessLayer) protected authBusinessLayer: AuthBusinessLayer,
+                @inject(UserBusinessLayer) protected userBusinessLayer: UserBusinessLayer,
+                @inject(UserRepository) protected userRepository: UserRepository,
+                @inject(JWTService) protected jwtService: JWTService,
+                @inject(EmailsManager) protected emailsManager: EmailsManager,
+                @inject(RefreshTokensRepository) protected refreshTokensRepository: RefreshTokensRepository) {
     }
 
     async login(req: Request, res: Response) {

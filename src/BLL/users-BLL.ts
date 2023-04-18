@@ -17,14 +17,14 @@ import {UserModel} from "../repositories/mogoose"
 import mongoose from "mongoose";
 import {User} from "../classes/userClass";
 import {EmailsManager} from "../bussiness/bussiness-service";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 import "reflect-metadata";
 
 @injectable()
 export class UserBusinessLayer {
 
-    constructor (protected userRepository: UserRepository,
-                 protected emailsManager: EmailsManager) { //we can pass any object looked like userRepository
+    constructor (@inject(UserRepository) protected userRepository: UserRepository,
+                 @inject(EmailsManager) protected emailsManager: EmailsManager) { //we can pass any object looked like userRepository
     }
 
     //(1) this method returns all users to router

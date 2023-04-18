@@ -1,13 +1,13 @@
 
 import {UserBusinessLayer} from "../BLL/users-BLL";
 import {Request, Response} from "express";
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 import "reflect-metadata";
 
 @injectable()
 export class UserController {
 
-    constructor (protected userBusinessLayer: UserBusinessLayer) {}
+    constructor (@inject(UserBusinessLayer) protected userBusinessLayer: UserBusinessLayer) {}
 
     async getAllUsers(req: Request, res: Response) {
         //INPUT
