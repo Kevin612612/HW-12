@@ -9,8 +9,10 @@
 
 import {commentDataModel, commentViewModel, userAssessType} from "../types/comments";
 import {CommentModel, UserModel} from "./mogoose";
-import {userDataModel} from "../types/users";
+import {injectable} from "inversify";
+import "reflect-metadata";
 
+@injectable()
 export class CommentsRepository {
 
     //(1) method returns comments by postId

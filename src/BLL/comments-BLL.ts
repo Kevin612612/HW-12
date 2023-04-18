@@ -9,7 +9,10 @@ import {CommentsRepository} from "../repositories/comments-repository-db";
 import {commentViewModel} from "../types/comments";
 import mongoose from "mongoose";
 import {userDataModel} from "../types/users";
+import {injectable} from "inversify";
+import "reflect-metadata";
 
+@injectable()
 export class CommentsBusinessLayer {
 
     constructor(protected commentsRepository: CommentsRepository) {

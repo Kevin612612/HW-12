@@ -23,10 +23,11 @@ import {CommentsRepository} from "../repositories/comments-repository-db";
 import {createId_1} from "../application/findNonExistId";
 import {CommentModel, PostModel} from "../repositories/mogoose";
 import mongoose from "mongoose";
-import {User} from "../classes/userClass";
 import {Comment} from "../classes/commentClass";
+import {injectable} from "inversify";
+import "reflect-metadata";
 
-
+@injectable()
 export class PostBusinessLayer {
 
 

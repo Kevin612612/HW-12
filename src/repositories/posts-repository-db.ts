@@ -12,8 +12,10 @@
 import {postViewModel} from "../types/posts";
 import {postsCollection} from "./mongodb";
 import {PostModel} from "./mogoose";
+import {injectable} from "inversify";
+import "reflect-metadata";
 
-
+@injectable()
 export class PostsRepository {
 
     //(1) method returns posts by blogID

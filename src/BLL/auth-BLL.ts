@@ -8,10 +8,11 @@
 
 import bcrypt from "bcrypt";
 import {userDataModel} from "../types/users";
-import {UserBusinessLayer} from "./users-BLL";
 import {UserRepository} from "../repositories/users-repository-db";
+import {injectable} from "inversify";
+import "reflect-metadata";
 
-
+@injectable()
 export class AuthBusinessLayer {
 
     constructor (protected userRepository: UserRepository) {}

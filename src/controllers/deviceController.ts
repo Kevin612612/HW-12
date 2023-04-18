@@ -2,7 +2,10 @@
 import {RefreshTokensBusinessLayer} from "../BLL/refresh-tokens-BLL";
 import {JWTService} from "../application/jwt-service";
 import {Request, Response} from "express";
+import {injectable} from "inversify";
+import "reflect-metadata";
 
+@injectable()
 export class DeviceController {
 
     constructor(protected refreshTokensBusinessLayer: RefreshTokensBusinessLayer,

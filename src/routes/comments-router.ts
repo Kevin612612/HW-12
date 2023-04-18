@@ -15,10 +15,13 @@ import {
     commentValidation,
     likeStatusValidation
 } from "../middleware/input-validation-middleware";
-import {commentController} from "../composition-root";
+import {container} from "../composition-root";
+import {CommentController} from "../controllers/commentController";
+
+const commentController = container.resolve(CommentController)
+
 
 export const commentsRouter = Router({})
-
 
 
 //(1) update comments

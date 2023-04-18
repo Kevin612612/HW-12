@@ -30,7 +30,10 @@ import {
     collectionErrors
 } from "../middleware/input-validation-middleware";
 import {authMiddleWare, checkRefreshToken} from "../middleware/authorization-middleware";
-import {authController} from "../composition-root";
+import {container} from "../composition-root";
+import {AuthController} from "../controllers/authController";
+
+const authController = container.resolve(AuthController)
 
 
 export const authRouter = Router({})

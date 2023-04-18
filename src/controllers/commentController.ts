@@ -1,7 +1,10 @@
 
 import {CommentsBusinessLayer} from "../BLL/comments-BLL";
 import {Request, Response} from "express";
+import {injectable} from "inversify";
+import "reflect-metadata";
 
+@injectable()
 export class CommentController {
 
     constructor(protected commentsBusinessLayer: CommentsBusinessLayer) {}

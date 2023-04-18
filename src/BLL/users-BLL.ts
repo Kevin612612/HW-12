@@ -17,7 +17,10 @@ import {UserModel} from "../repositories/mogoose"
 import mongoose from "mongoose";
 import {User} from "../classes/userClass";
 import {EmailsManager} from "../bussiness/bussiness-service";
+import {injectable} from "inversify";
+import "reflect-metadata";
 
+@injectable()
 export class UserBusinessLayer {
 
     constructor (protected userRepository: UserRepository,

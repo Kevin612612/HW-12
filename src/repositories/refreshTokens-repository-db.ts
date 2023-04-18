@@ -13,7 +13,10 @@
 import {refreshTokensCollection} from "./mongodb";
 import {refreshTokensDataModel, RefreshTokensDataTypeSchema} from "../types/refreshTokens";
 import {RefreshTokenModel} from "./mogoose";
+import {injectable} from "inversify";
+import "reflect-metadata";
 
+@injectable()
 export class RefreshTokensRepository {
 
     //(1) method returns structured Array

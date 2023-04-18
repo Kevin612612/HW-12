@@ -21,7 +21,11 @@ import {
     blogIdValidationInParams, collectionErrors
 } from "../middleware/input-validation-middleware";
 import {authorization} from "../middleware/authorization-middleware";
-import {blogController} from "../composition-root";
+import {container} from "../composition-root";
+import {BlogController} from "../controllers/blogController";
+import "reflect-metadata";
+
+const blogController = container.resolve(BlogController)
 
 
 export const blogsRouter = Router({})

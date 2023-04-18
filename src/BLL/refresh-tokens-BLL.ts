@@ -12,7 +12,10 @@
 import {RefreshTokensRepository} from "../repositories/refreshTokens-repository-db";
 import {RefreshTokensTypeSchema} from "../types/refreshTokens";
 import {JWTService} from "../application/jwt-service";
+import {injectable} from "inversify";
+import "reflect-metadata";
 
+@injectable()
 export class RefreshTokensBusinessLayer {
 
     constructor (protected jwtService: JWTService,

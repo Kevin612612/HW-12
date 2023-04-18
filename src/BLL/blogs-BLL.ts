@@ -20,7 +20,10 @@ import {createId_1} from "../application/findNonExistId";
 import {PostsTypeSchema} from "../types/posts";
 import {BlogModel, PostModel} from "../repositories/mogoose";
 import mongoose from "mongoose";
+import {injectable} from "inversify";
+import "reflect-metadata";
 
+@injectable()
 export class BlogBusinessLayer {
 
     constructor(protected blogsRepository: BlogsRepository,

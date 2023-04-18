@@ -20,7 +20,10 @@ import {blackList} from "../repositories/mongodb";
 import {RefreshTokensRepository} from "../repositories/refreshTokens-repository-db";
 import add from "date-fns/add";
 import {refreshTokensDataModel} from "../types/refreshTokens";
+import {injectable} from "inversify";
+import "reflect-metadata";
 
+@injectable()
 export class JWTService {
 
     constructor(protected userRepository: UserRepository,

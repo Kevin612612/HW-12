@@ -10,8 +10,10 @@ import {Router} from "express";
 
 import {checkRefreshToken} from "../middleware/authorization-middleware";
 import {collectionErrors, deviceIdValidation} from "../middleware/input-validation-middleware";
-import {deviceController} from "../composition-root";
+import {DeviceController} from "../controllers/deviceController";
+import {container} from "../composition-root";
 
+const deviceController = container.resolve(DeviceController)
 
 export const deviceRouter = Router({})
 

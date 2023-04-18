@@ -24,8 +24,10 @@ import {usersCollection} from "./mongodb";
 import add from "date-fns/add";
 import {UserModel} from "./mogoose";
 import mongoose from "mongoose";
+import {injectable} from "inversify";
+import "reflect-metadata";
 
-
+@injectable()
 export class UserRepository {
 
     //(1) method returns array of users

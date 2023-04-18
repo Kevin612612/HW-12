@@ -10,9 +10,11 @@ import requestIp from "request-ip";
 import UAParser from "ua-parser-js";
 import {createDeviceId} from "../application/findNonExistId";
 import {blackList} from "../repositories/mongodb";
+import {injectable} from "inversify";
+import "reflect-metadata";
 
+@injectable()
 export class AuthController {
-
 
     constructor(protected authBusinessLayer: AuthBusinessLayer,
                 protected userBusinessLayer: UserBusinessLayer,

@@ -3,8 +3,10 @@ import {emailAdapter} from "../adapters/email-adapter";
 import {v4 as uuidv4} from 'uuid'
 import add from "date-fns/add";
 import {UserRepository} from "../repositories/users-repository-db";
+import {injectable} from "inversify";
+import "reflect-metadata";
 
-
+@injectable()
 export class EmailsManager {
 
     constructor(protected userRepository: UserRepository) {}

@@ -2,7 +2,10 @@
 import {BlogBusinessLayer} from "../BLL/blogs-BLL";
 import {PostBusinessLayer} from "../BLL/posts-BLL";
 import {Request, Response} from "express";
+import {injectable} from "inversify";
+import "reflect-metadata";
 
+@injectable()
 export class BlogController {
 
     constructor(protected blogBusinessLayer: BlogBusinessLayer,

@@ -21,7 +21,11 @@ import {
     titleValidation
 } from "../middleware/input-validation-middleware";
 import {authMiddleWare, authorization, checkAuthMiddleWare} from "../middleware/authorization-middleware";
-import {postController} from "../composition-root";
+import {container} from "../composition-root";
+import {PostController} from "../controllers/postController";
+
+const postController = container.resolve(PostController)
+
 
 export const postsRouter = Router({})
 

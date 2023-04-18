@@ -11,8 +11,10 @@
 
 import {blogViewModel} from "../types/blogs";
 import {BlogModel} from "./mogoose";
+import {injectable} from "inversify";
+import "reflect-metadata";
 
-
+@injectable()
 export class BlogsRepository {
 
     //(1) method returns structured Array

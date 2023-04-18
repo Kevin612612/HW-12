@@ -17,6 +17,8 @@ import {CommentsBusinessLayer} from "./BLL/comments-BLL";
 import {CommentController} from "./controllers/commentController";
 import {RefreshTokensBusinessLayer} from "./BLL/refresh-tokens-BLL";
 import {DeviceController} from "./controllers/deviceController";
+import {Container} from "inversify";
+import "reflect-metadata";
 
 
 export const userRepository = new UserRepository()
@@ -45,12 +47,42 @@ export const authController = new AuthController(authBusinessLayer, userBusiness
 export const deviceController = new DeviceController(refreshTokensBusinessLayer, jwtService)
 
 
-
+// handmade IoC
 const objects = [userRepository, blogsRepository, postsRepository, commentsRepository, refreshTokensRepository, jwtService, emailsManager, userBusinessLayer, authBusinessLayer, blogBusinessLayer, postBusinessLayer, commentsBusinessLayer, refreshTokensBusinessLayer, userController, blogController, postController, commentController, authController, deviceController]
-
 export const ioc = {
     getInstanceOfClass(ClassType: any) {
         return objects.find(o => o instanceof ClassType)
     }
 }
 
+//InversifyJS container
+export const container = new Container();
+
+container.bind<UserController>(UserController).to(UserController);
+container.bind<UserBusinessLayer>(UserBusinessLayer).to(UserBusinessLayer);
+container.bind<UserRepository>(UserRepository).to(UserRepository);
+
+container.bind<BlogController>(BlogController).to(BlogController);
+container.bind<BlogBusinessLayer>(BlogBusinessLayer).to(BlogBusinessLayer);
+container.bind<BlogsRepository>(BlogsRepository).to(BlogsRepository);
+
+container.bind<PostController>(PostController).to(PostController);
+container.bind<PostBusinessLayer>(PostBusinessLayer).to(PostBusinessLayer);
+container.bind<PostsRepository>(PostsRepository).to(PostsRepository);
+
+container.bind<CommentController>(CommentController).to(CommentController);
+container.bind<CommentsBusinessLayer>(CommentsBusinessLayer).to(CommentsBusinessLayer);
+container.bind<CommentsRepository>(CommentsRepository).to(CommentsRepository);
+
+container.bind<AuthController>(AuthController).to(AuthController);
+container.bind<AuthBusinessLayer>(AuthBusinessLayer).to(AuthBusinessLayer);
+
+
+container.bind<DeviceController>(DeviceController).to(DeviceController);
+
+container.bind<RefreshTokensBusinessLayer>(RefreshTokensBusinessLayer).to(RefreshTokensBusinessLayer);
+container.bind<RefreshTokensRepository>(RefreshTokensRepository).to(RefreshTokensRepository);
+
+container.bind<JWTService>(JWTService).to(JWTService);
+
+container.bind<EmailsManager>(EmailsManager).to(EmailsManager);
