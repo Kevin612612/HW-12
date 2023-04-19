@@ -30,9 +30,9 @@ app.use(device.capture())
 
 app.set('trust proxy', true)
 
-const pathToStatic = '/Users/antonlazukin/WebstormProjects/HW-12/src' //localhost
+//const pathToStatic = '/Users/antonlazukin/WebstormProjects/HW-12/src' //localhost
 //const pathToStatic = __dirname + '../../src'
-// const pathToStatic = __dirname
+const pathToStatic = __dirname
 
 app.use(express.static(path.resolve(pathToStatic, 'static/registration')))
 app.use(express.static(path.resolve(pathToStatic, 'static/main_page')))
