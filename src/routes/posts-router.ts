@@ -101,5 +101,5 @@ postsRouter.put('/:postId/like-status',
     authMiddleWare, // put user into request
     likeStatusValidation,
     collectionErrors,
-    // postController.changeLikeStatus.bind(postController)
+    postController.changeLikeStatus.bind(postController)
 )

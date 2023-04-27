@@ -9,11 +9,12 @@
 //(5) updatePostById
 //(6) deletePost
 
-import {postViewModel} from "../types/posts";
+import {postDataModel, postViewModel} from "../types/posts";
 import {postsCollection} from "./mongodb";
-import {PostModel} from "./mogoose";
+import {CommentModel, PostModel} from "./mogoose";
 import {injectable} from "inversify";
 import "reflect-metadata";
+import {commentDataModel} from "../types/comments";
 
 @injectable()
 export class PostsRepository {
@@ -47,8 +48,14 @@ export class PostsRepository {
 
     //(4) method returns post by ID
     async findPostById(postId: string): Promise<postViewModel | undefined | null> {
-        return PostModel.findOne({ id: postId }, '-_id')
+        return PostModel.findOne({ id: postId }).select({_id: 0, userAssess: 0})
     }
+
+
+    //(4-1) method returns post by ID as data model
+        async findPostByIdDbType(postId: string): Promise<postDataModel | undefined | null> {
+            return PostModel.findOne({id: postId}).select({_id: 0})
+        }
 
 
     //(5) method updates post by ID
@@ -66,10 +73,88 @@ export class PostsRepository {
         return result.matchedCount === 1
     }
 
+
     //(6) method deletes by ID
     async deletePost(postId: string): Promise<boolean> {
         const result = await PostModel.deleteOne({id: postId})
         return result.deletedCount === 1
+    }
+
+
+
+    //(6) method change like status by Id
+    async changeLikeStatus(postId: string, likeStatus: string): Promise<boolean> {
+        const result = await PostModel.updateOne({id: postId}, {
+            $set: {
+                'extendedLikesInfo.myStatus': likeStatus
+            }
+        })
+        return result.matchedCount === 1
+    }
+
+    //(7) add like
+    async addLike(post: postDataModel, userId: string): Promise<boolean> {
+        const result = await PostModel.updateOne({id: post.id}, {
+            $set: {
+                'extendedLikesInfo.likesCount': post.extendedLikesInfo.likesCount + 1
+            },
+            $push: {userAssess: {userIdLike: userId, assess: 'Like'}}
+
+        })
+        return result.matchedCount === 1
+    }
+
+    //(7-1) delete like
+    async deleteLike(post: postDataModel, userId: string): Promise<boolean> {
+        const result = await PostModel.updateOne({id: post.id}, {
+            $set: {
+                'extendedLikesInfo.likesCount': post.extendedLikesInfo.likesCount - 1
+            },
+            $pull: {userAssess: {userIdLike: userId, assess: 'Like'}}
+        })
+        return result.matchedCount === 1
+    }
+
+
+    //(8) add disLike
+    async addDislike(post: postDataModel, userId: string): Promise<boolean> {
+        const result = await PostModel.updateOne({id: post.id}, {
+            $set: {
+                'extendedLikesInfo.dislikesCount': post.extendedLikesInfo.dislikesCount + 1
+            },
+            $push: {userAssess: {userIdLike: userId, assess: 'Dislike'}}
+        })
+        return result.matchedCount === 1
+    }
+
+
+    //(8-1) delete disLike
+    async deleteDislike(post: postDataModel, userId: string): Promise<boolean> {
+        const result = await PostModel.updateOne({id: post.id}, {
+            $set: {
+                'extendedLikesInfo.dislikesCount': post.extendedLikesInfo.dislikesCount - 1
+            },
+            $pull: {userAssess: {userIdLike: userId, assess: 'Dislike'}}
+        })
+        return result.matchedCount === 1
+    }
+
+    //(9) set myStatus None
+    async setNone(post: postDataModel): Promise<boolean> {
+        const result = await PostModel.updateOne({id: post.id}, {
+            $set: {
+                'extendedLikesInfo.myStatus': 'None'
+            }
+        })
+        return result.matchedCount === 1
+    }
+
+    //(10) add None
+    async addNone(post: postDataModel, userId: string): Promise<boolean> {
+        const result = await PostModel.updateOne({id: post.id}, {
+            $push: {userAssess: {userIdLike: userId, assess: 'None'}}
+        })
+        return result.matchedCount === 1
     }
 }
 

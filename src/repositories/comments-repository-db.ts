@@ -56,6 +56,7 @@ export class CommentsRepository {
         return CommentModel.findOne({id: id}).select({_id: 0, __v: 0, postId: 0})
     }
 
+
     //(5-1) method returns comment by Id as data model
     async findCommentByIdDbType(id: string): Promise<commentDataModel | undefined | null> {
         return CommentModel.findOne({id: id}).select({_id: 0, __v: 0, postId: 0})
@@ -106,6 +107,7 @@ export class CommentsRepository {
         })
         return result.matchedCount === 1
     }
+
 
     //(8-1) delete disLike
     async deleteDislike(comment: commentDataModel, userId: string): Promise<boolean> {

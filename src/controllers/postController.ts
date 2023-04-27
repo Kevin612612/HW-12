@@ -77,4 +77,16 @@ export class PostController {
         //RETURN
         res.status(204).send(result)
     }
+
+
+    async changeLikeStatus(req: Request, res: Response) {
+            //INPUT
+            const postId = req.params.postId
+            const likeStatus = req.body.likeStatus
+            const user = req.user
+            //BLL
+            const post = await this.postBusinessLayer.changeLikeStatus(postId, likeStatus, user)
+            //RETURN
+            res.send(post)
+        }
 }
