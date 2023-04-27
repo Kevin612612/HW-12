@@ -1,8 +1,6 @@
-
 import {ObjectId} from "mongodb";
 import {createId_1} from "../application/findNonExistId";
 import {CommentModel} from "../repositories/mogoose";
-import {userRepository} from "../composition-root";
 import {userAssessType} from "../types/comments";
 
 

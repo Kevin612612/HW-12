@@ -1,4 +1,5 @@
 //COMMENTS
+
 //view type
 export type commentViewModel = {
     commentatorInfo: {
@@ -35,8 +36,8 @@ export type commentDataModel = {
 }
 
 export type userAssessType = {
-    userIdLike: string,
-    assess: string
+    userIdLike: string, //1,2,3,4...
+    assess: string //'Like', 'Dislike', 'None'
 }
 
 //commentType returned by POST-method

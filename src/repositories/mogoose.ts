@@ -1,10 +1,10 @@
 import mongoose from 'mongoose'
 import {userDataModel} from "../types/users";
 import {blogViewModel} from "../types/blogs";
-import {postViewModel} from "../types/posts";
 import {commentDataModel} from "../types/comments";
 import {refreshTokensDataModel} from "../types/refreshTokens";
 import {ObjectId} from "mongodb";
+import {postDataModel} from "../types/posts";
 
 //URI
 export const mongoUri = process.env.MONGO_URL!
@@ -81,7 +81,7 @@ const blogSchema = new mongoose.Schema<blogViewModel>({
 
 
 //POST SCHEMA
-const postSchema = new mongoose.Schema<postViewModel>({
+const postSchema = new mongoose.Schema<postDataModel>({
     id: {type: String, required: true},
     title: {type: String, required: true},
     shortDescription: {type: String, required: true},
@@ -89,6 +89,29 @@ const postSchema = new mongoose.Schema<postViewModel>({
     blogId: {type: String, required: true},
     blogName: {type: String, required: true},
     createdAt: {type: Date, required: true, default: Date.now},
+    extendedLikesInfo: {
+        dislikesCount: {
+            type: Number,
+            required: true,
+        },
+        likesCount: {
+            type: Number,
+            required: true,
+        },
+        myStatus: {
+            type: String,
+            required: true,
+        },
+        newestLikes: [{
+            userId: {type: String, required: true},
+            login: {type: String, required: true},
+            addedAt: {type: String, required: true},
+        }]
+    },
+    userAssess: [{
+        userIdLike: {type: String, required: true},
+        assess: {type: String, required: true}, // Like / Dislike / None
+    }]
 })
 
 

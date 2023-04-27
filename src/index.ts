@@ -21,4 +21,4 @@ const startApp = async () => {
 }
 
 //START APP
-startApp();
+startApp().then(r => {});

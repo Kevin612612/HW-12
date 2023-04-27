@@ -11,7 +11,7 @@
 
 import {
     postViewModel,
-    PostsTypeSchema
+    PostsTypeSchema, postDataModel
 } from "../types/posts";
 import {
     CommentsTypeSchema,
@@ -26,6 +26,7 @@ import mongoose from "mongoose";
 import {Comment} from "../classes/commentClass";
 import {inject, injectable} from "inversify";
 import "reflect-metadata";
+import {Post} from "../classes/postClass";
 
 @injectable()
 export class PostBusinessLayer {
@@ -154,22 +155,16 @@ export class PostBusinessLayer {
     async newPostedPost(blogId: string,
                         title: string,
                         shortDescription: string,
-                        content: any): Promise<postViewModel | number | string[]> {
-        const idName: string = await createId_1(PostModel)
+                        content: any): Promise<postDataModel | number | string[]> {
         const blog = await this.blogsRepository.findBlogById(blogId)
         if (blog) {
-            const newPost = new PostModel<postViewModel>({
-                id: idName,
-                title: title,
-                shortDescription: shortDescription,
-                blogId: blogId,
-                blogName: blog.name,
-                content: content,
-                createdAt: new Date(),
-            })
+            //create new post
+            let newPost = new Post() //empty post
+            newPost = await newPost.addAsyncParams(title, shortDescription, content, blogId) // fill post with async params
             // put this new post into db
             try {
                 const result = await this.postsRepository.newPostedPost(newPost)
+                return newPost
             } catch (err: any) {
                 const validationErrors = []
                 if (err instanceof mongoose.Error.ValidationError) {
@@ -179,16 +174,6 @@ export class PostBusinessLayer {
                     }
                 }
                 return validationErrors
-            }
-
-            return {
-                id: newPost.id,
-                title: newPost.title,
-                shortDescription: newPost.shortDescription,
-                blogId: newPost.blogId,
-                blogName: newPost.blogName,
-                content: newPost.content,
-                createdAt: newPost.createdAt,
             }
         } else {
             return 404

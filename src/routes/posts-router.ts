@@ -1,4 +1,3 @@
-
 //Presentation Layer
 
 
@@ -9,13 +8,15 @@
 //(5)get     returns post by postId
 //(6)put     update post by postId
 //(7)delete  delete post by postId
+//(8)put     like-operation
+
 
 
 import {Router} from "express";
 import {
     blogIdValidationInBody, collectionErrors,
     commentValidation,
-    contentValidation,
+    contentValidation, likeStatusValidation,
     postIdValidation,
     shortDescriptionValidation,
     titleValidation
@@ -93,4 +94,12 @@ postsRouter.delete('/:postId',
     postIdValidation,
     collectionErrors, // should be the last middleware
     postController.deletePostById.bind(postController)
+)
+
+//(8) like operation
+postsRouter.put('/:postId/like-status',
+    authMiddleWare, // put user into request
+    likeStatusValidation,
+    collectionErrors,
+    // postController.changeLikeStatus.bind(postController)
 )
