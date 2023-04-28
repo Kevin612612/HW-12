@@ -1,4 +1,3 @@
-
 //Data access Layer
 
 
@@ -15,6 +14,7 @@ import {CommentModel, PostModel} from "./mogoose";
 import {injectable} from "inversify";
 import "reflect-metadata";
 import {commentDataModel} from "../types/comments";
+import {userDataModel} from "../types/users";
 
 @injectable()
 export class PostsRepository {
@@ -48,14 +48,14 @@ export class PostsRepository {
 
     //(4) method returns post by ID
     async findPostById(postId: string): Promise<postViewModel | undefined | null> {
-        return PostModel.findOne({ id: postId }).select({_id: 0, userAssess: 0})
+        return PostModel.findOne({id: postId}).select({_id: 0, userAssess: 0})
     }
 
 
     //(4-1) method returns post by ID as data model
-        async findPostByIdDbType(postId: string): Promise<postDataModel | undefined | null> {
-            return PostModel.findOne({id: postId}).select({_id: 0})
-        }
+    async findPostByIdDbType(postId: string): Promise<postDataModel | undefined | null> {
+        return PostModel.findOne({id: postId}).select({_id: 0})
+    }
 
 
     //(5) method updates post by ID
@@ -81,7 +81,6 @@ export class PostsRepository {
     }
 
 
-
     //(6) method change like status by Id
     async changeLikeStatus(postId: string, likeStatus: string): Promise<boolean> {
         const result = await PostModel.updateOne({id: postId}, {
@@ -93,13 +92,19 @@ export class PostsRepository {
     }
 
     //(7) add like
-    async addLike(post: postDataModel, userId: string): Promise<boolean> {
+    async addLike(post: postDataModel, user: userDataModel): Promise<boolean> {
         const result = await PostModel.updateOne({id: post.id}, {
             $set: {
                 'extendedLikesInfo.likesCount': post.extendedLikesInfo.likesCount + 1
             },
-            $push: {userAssess: {userIdLike: userId, assess: 'Like'}}
-
+            $push: {
+                userAssess: {userIdLike: user.id, assess: 'Like'},
+                'extendedLikesInfo.newestLikes': {
+                    userId: user.id,
+                    login: user.accountData.login,
+                    addedAt: new Date()
+                }
+            }
         })
         return result.matchedCount === 1
     }

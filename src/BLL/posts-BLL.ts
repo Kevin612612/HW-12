@@ -201,14 +201,14 @@ export class PostBusinessLayer {
             }
         }
         return {
-            id : post.id,
-            title : post.title,
-            shortDescription : post.shortDescription,
-            content : post.content,
-            blogId : post.blogId,
-            blogName : post.blogName,
-            createdAt : post.createdAt,
-            extendedLikesInfo : post.extendedLikesInfo,
+            id: post.id,
+            title: post.title,
+            shortDescription: post.shortDescription,
+            content: post.content,
+            blogId: post.blogId,
+            blogName: post.blogName,
+            createdAt: post.createdAt,
+            extendedLikesInfo: post.extendedLikesInfo,
         }
     }
 
@@ -251,57 +251,54 @@ export class PostBusinessLayer {
     //(8) method change like status
     async changeLikeStatus(postId: string, likeStatus: string, user: userDataModel): Promise<number> {
         const post = await this.postsRepository.findPostByIdDbType(postId)
-        if (post) {
-            //change myStatus
-            const result = await this.postsRepository.changeLikeStatus(postId, likeStatus)
-            //check whether this user left assess to this post
-            const userAssess = post.userAssess.find(obj => obj.userIdLike === user.id)
-            //if this user didn't leave comment -> add like/dislike/none to post
-            if (!userAssess) {
-                if (likeStatus == 'Like') {
-                    const result1 = await this.postsRepository.addLike(post, user.id)
-                }
-                if (likeStatus == 'Dislike') {
-                    const result2 = await this.postsRepository.addDislike(post, user.id)
-                }
-                if (likeStatus == 'None') {
-                    const result3 = await this.postsRepository.setNone(post)
-                }
-            } else {
-                const assess = userAssess.assess //assess of this user
-                if (assess == 'Like' && likeStatus == 'Like') {
-                    //nothing
-                }
-                if (assess == 'Like' && likeStatus == 'Dislike') {
-                    //minus like and delete user from array then add addDislike()
-                    const result1 = await this.postsRepository.deleteLike(post, user.id)
-                    const result2 = await this.postsRepository.addDislike(post, user.id)
-                    //set my status None
-                    const result3 = await this.postsRepository.setNone(post)
-                }
-                if (assess == 'Like' && likeStatus == 'None') {
-                    //minus like and delete user from array
-                    const result1 = await this.postsRepository.deleteLike(post, user.id)
-                }
-                if (assess == 'Dislike' && likeStatus == 'Like') {
-                    //minus dislike and delete user from array then add addLike()
-                    const result1 = await this.postsRepository.deleteDislike(post, user.id)
-                    const result2 = await this.postsRepository.addLike(post, user.id)
-                    //set my status None
-                    const result3 = await this.postsRepository.setNone(post)
-                }
-                if (assess == 'Dislike' && likeStatus == 'Dislike') {
-                    //nothing
-                }
-                if (assess == 'Dislike' && likeStatus == 'None') {
-                    //minus dislike and delete user from array
-                    const result1 = await this.postsRepository.deleteDislike(post, user.id)
-                }
+        if (!post) return 404
+        //change myStatus
+        const result = await this.postsRepository.changeLikeStatus(postId, likeStatus)
+        //check whether this user left assess to this post
+        const userAssess = post.userAssess.find(obj => obj.userIdLike === user.id)
+        //if this user didn't leave like/dislike -> add like/dislike/none to post
+        if (!userAssess) {
+            if (likeStatus == 'Like') {
+                const result1 = await this.postsRepository.addLike(post, user)
             }
-            return 204
+            if (likeStatus == 'Dislike') {
+                const result2 = await this.postsRepository.addDislike(post, user.id)
+            }
+            if (likeStatus == 'None') {
+                const result3 = await this.postsRepository.setNone(post)
+            }
         } else {
-            return 404
+            const assess = userAssess.assess //assess of this user
+            if (assess == 'Like' && likeStatus == 'Like') {
+                //nothing
+            }
+            if (assess == 'Like' && likeStatus == 'Dislike') {
+                //minus like and delete user from array then add addDislike()
+                const result1 = await this.postsRepository.deleteLike(post, user.id)
+                const result2 = await this.postsRepository.addDislike(post, user.id)
+                //set my status None
+                const result3 = await this.postsRepository.setNone(post)
+            }
+            if (assess == 'Like' && likeStatus == 'None') {
+                //minus like and delete user from array
+                const result1 = await this.postsRepository.deleteLike(post, user.id)
+            }
+            if (assess == 'Dislike' && likeStatus == 'Like') {
+                //minus dislike and delete user from array then add addLike()
+                const result1 = await this.postsRepository.deleteDislike(post, user.id)
+                const result2 = await this.postsRepository.addLike(post, user)
+                //set my status None
+                const result3 = await this.postsRepository.setNone(post)
+            }
+            if (assess == 'Dislike' && likeStatus == 'Dislike') {
+                //nothing
+            }
+            if (assess == 'Dislike' && likeStatus == 'None') {
+                //minus dislike and delete user from array
+                const result1 = await this.postsRepository.deleteDislike(post, user.id)
+            }
         }
+        return 204
     }
 }
 
