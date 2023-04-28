@@ -207,7 +207,15 @@ export class PostBusinessLayer {
                 myStatus: post.extendedLikesInfo.myStatus,
                 newestLikes: post.extendedLikesInfo.newestLikes
                     .sort((a, b) => Date.parse(b.addedAt) - Date.parse(a.addedAt))
-                    .slice(-3)},
+                    .slice(-3)
+                    .map(obj => {
+                        return {
+                            userId: obj.userId,
+                            login: obj.login,
+                            addedAt: obj.addedAt
+                        }
+                    })
+            }
         }
     }
 
@@ -215,27 +223,21 @@ export class PostBusinessLayer {
     //(6) method updates post by postId
     async updatePostById(postId: string, blogId: string, title: string, shortDescription: string, content: string): Promise<boolean | number | string[]> {
         const foundBlog = await this.blogsRepository.findBlogById(blogId)
-        if (foundBlog) {
-            const foundPost = await this.postsRepository.findPostById(postId)
-            if (foundPost) {
-                try {
-                    const result = this.postsRepository.updatePostById(postId, blogId, foundBlog.name, title, shortDescription, content)
-                    return true
-                } catch (err: any) {
-                    const validationErrors = []
-                    if (err instanceof mongoose.Error.ValidationError) {
-                        for (const path in err.errors) {
-                            const error = err.errors[path].message
-                            validationErrors.push(error)
-                        }
-                    }
-                    return validationErrors
+        if (!foundBlog) return 404
+        const foundPost = await this.postsRepository.findPostById(postId)
+        if (!foundPost) return 404
+        try {
+            const result = this.postsRepository.updatePostById(postId, blogId, foundBlog.name, title, shortDescription, content)
+            return true
+        } catch (err: any) {
+            const validationErrors = []
+            if (err instanceof mongoose.Error.ValidationError) {
+                for (const path in err.errors) {
+                    const error = err.errors[path].message
+                    validationErrors.push(error)
                 }
-            } else {
-                return 404
             }
-        } else {
-            return 404
+            return validationErrors
         }
     }
 
