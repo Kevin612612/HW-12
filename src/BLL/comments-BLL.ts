@@ -4,6 +4,7 @@
 //(1) updateCommentById
 //(2) deleteComment
 //(3) findCommentById
+//(4) changeLikeStatus
 
 import {CommentsRepository} from "../repositories/comments-repository-db";
 import {commentViewModel} from "../types/comments";

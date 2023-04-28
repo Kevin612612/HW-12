@@ -76,8 +76,9 @@ export class PostBusinessLayer {
                             dislikesCount: obj.likesInfo.dislikesCount,
                             myStatus: 'None',
                         }
+                    }
                 }
-            }})//if user left comment return his assess as myStatus
+            })//if user left comment return his assess as myStatus
 
             return {
                 pagesCount: Math.ceil(quantityOfDocs / +pageSize),
@@ -157,36 +158,35 @@ export class PostBusinessLayer {
     async newPostedPost(blogId: string,
                         title: string,
                         shortDescription: string,
-                        content: any): Promise<postDataModel | number | string[]> {
+                        content: any): Promise<postViewModel | undefined | null | number | string[]> {
         const blog = await this.blogsRepository.findBlogById(blogId)
-        if (blog) {
-            //create new post
-            let newPost = new Post() //empty post
-            newPost = await newPost.addAsyncParams(title, shortDescription, content, blogId) // fill post with async params
-            // put this new post into db
-            try {
-                const result = await this.postsRepository.newPostedPost(newPost)
-                return newPost
-            } catch (err: any) {
-                const validationErrors = []
-                if (err instanceof mongoose.Error.ValidationError) {
-                    for (const path in err.errors) {
-                        const error = err.errors[path].message
-                        validationErrors.push(error)
-                    }
+        if (!blog) return 404
+        //create new post
+        let newPost = new Post() //empty post
+        newPost = await newPost.addAsyncParams(title, shortDescription, content, blogId) // fill post with async params
+        // put this new post into db
+        try {
+            const result = await this.postsRepository.newPostedPost(newPost)
+            //find this created post
+            return await this.postsRepository.findPostById(newPost.id)
+        } catch (err: any) {
+            const validationErrors = []
+            if (err instanceof mongoose.Error.ValidationError) {
+                for (const path in err.errors) {
+                    const error = err.errors[path].message
+                    validationErrors.push(error)
                 }
-                return validationErrors
             }
-        } else {
-            return 404
+            return validationErrors
         }
     }
 
 
     //(5) method take post by postId
     async findPostById(postId: string): Promise<postViewModel | number> {
-        const result = await this.postsRepository.findPostById(postId)
-        return result ? result : 404
+        const post = await this.postsRepository.findPostById(postId)
+        if (!post) return 404
+        return post
     }
 
 
@@ -226,59 +226,59 @@ export class PostBusinessLayer {
 
 
     //(8) method change like status
-        async changeLikeStatus(postId: string, likeStatus: string, user: userDataModel): Promise<number> {
-            const post = await this.postsRepository.findPostByIdDbType(postId)
-            if (post) {
-                //change myStatus
-                const result = await this.postsRepository.changeLikeStatus(postId, likeStatus)
-                //check whether this user left assess to this post
-                const userAssess = post.userAssess.find(obj => obj.userIdLike === user.id)
-                //if this user didn't leave comment -> add like/dislike/none to post
-                if (!userAssess) {
-                    if (likeStatus == 'Like') {
-                        const result1 = await this.postsRepository.addLike(post, user.id)
-                    }
-                    if (likeStatus == 'Dislike') {
-                        const result2 = await this.postsRepository.addDislike(post, user.id)
-                    }
-                    if (likeStatus == 'None') {
-                        const result3 = await this.postsRepository.setNone(post)
-                    }
-                } else {
-                    const assess = userAssess.assess //assess of this user
-                    if (assess == 'Like' && likeStatus == 'Like') {
-                        //nothing
-                    }
-                    if (assess == 'Like' && likeStatus == 'Dislike') {
-                        //minus like and delete user from array then add addDislike()
-                        const result1 = await this.postsRepository.deleteLike(post, user.id)
-                        const result2 = await this.postsRepository.addDislike(post, user.id)
-                        //set my status None
-                        const result3 = await this.postsRepository.setNone(post)
-                    }
-                    if (assess == 'Like' && likeStatus == 'None') {
-                        //minus like and delete user from array
-                        const result1 = await this.postsRepository.deleteLike(post, user.id)
-                    }
-                    if (assess == 'Dislike' && likeStatus == 'Like') {
-                        //minus dislike and delete user from array then add addLike()
-                        const result1 = await this.postsRepository.deleteDislike(post, user.id)
-                        const result2 = await this.postsRepository.addLike(post, user.id)
-                        //set my status None
-                        const result3 = await this.postsRepository.setNone(post)
-                    }
-                    if (assess == 'Dislike' && likeStatus == 'Dislike') {
-                        //nothing
-                    }
-                    if (assess == 'Dislike' && likeStatus == 'None') {
-                        //minus dislike and delete user from array
-                        const result1 = await this.postsRepository.deleteDislike(post, user.id)
-                    }
+    async changeLikeStatus(postId: string, likeStatus: string, user: userDataModel): Promise<number> {
+        const post = await this.postsRepository.findPostByIdDbType(postId)
+        if (post) {
+            //change myStatus
+            const result = await this.postsRepository.changeLikeStatus(postId, likeStatus)
+            //check whether this user left assess to this post
+            const userAssess = post.userAssess.find(obj => obj.userIdLike === user.id)
+            //if this user didn't leave comment -> add like/dislike/none to post
+            if (!userAssess) {
+                if (likeStatus == 'Like') {
+                    const result1 = await this.postsRepository.addLike(post, user.id)
                 }
-                return 204
+                if (likeStatus == 'Dislike') {
+                    const result2 = await this.postsRepository.addDislike(post, user.id)
+                }
+                if (likeStatus == 'None') {
+                    const result3 = await this.postsRepository.setNone(post)
+                }
             } else {
-                return 404
+                const assess = userAssess.assess //assess of this user
+                if (assess == 'Like' && likeStatus == 'Like') {
+                    //nothing
+                }
+                if (assess == 'Like' && likeStatus == 'Dislike') {
+                    //minus like and delete user from array then add addDislike()
+                    const result1 = await this.postsRepository.deleteLike(post, user.id)
+                    const result2 = await this.postsRepository.addDislike(post, user.id)
+                    //set my status None
+                    const result3 = await this.postsRepository.setNone(post)
+                }
+                if (assess == 'Like' && likeStatus == 'None') {
+                    //minus like and delete user from array
+                    const result1 = await this.postsRepository.deleteLike(post, user.id)
+                }
+                if (assess == 'Dislike' && likeStatus == 'Like') {
+                    //minus dislike and delete user from array then add addLike()
+                    const result1 = await this.postsRepository.deleteDislike(post, user.id)
+                    const result2 = await this.postsRepository.addLike(post, user.id)
+                    //set my status None
+                    const result3 = await this.postsRepository.setNone(post)
+                }
+                if (assess == 'Dislike' && likeStatus == 'Dislike') {
+                    //nothing
+                }
+                if (assess == 'Dislike' && likeStatus == 'None') {
+                    //minus dislike and delete user from array
+                    const result1 = await this.postsRepository.deleteDislike(post, user.id)
+                }
             }
+            return 204
+        } else {
+            return 404
         }
+    }
 }
 
