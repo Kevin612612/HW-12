@@ -210,9 +210,9 @@ export class PostBusinessLayer {
                     .slice(-3)
                     .map(obj => {
                         return {
-                            userId: obj.userId,
+                            addedAt: obj.addedAt,
                             login: obj.login,
-                            addedAt: obj.addedAt
+                            userId: obj.userId,
                         }
                     })
             }

@@ -115,7 +115,8 @@ export class PostsRepository {
             $set: {
                 'extendedLikesInfo.likesCount': post.extendedLikesInfo.likesCount - 1
             },
-            $pull: {userAssess: {userIdLike: userId, assess: 'Like'}}
+            $pull: {userAssess: {userIdLike: userId, assess: 'Like'},
+                'extendedLikesInfo.newestLikes': {userId : userId}}
         })
         return result.matchedCount === 1
     }
