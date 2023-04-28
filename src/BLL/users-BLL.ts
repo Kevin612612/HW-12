@@ -64,7 +64,9 @@ export class UserBusinessLayer {
             page: +pageNumber,
             pageSize: +pageSize,
             totalCount: quantityOfDocs,
-            items: sortedItems.slice((+pageNumber - 1) * (+pageSize), (+pageNumber) * (+pageSize)).map((User: { id: any; accountData: { login: any; email: any; createdAt: any; }; }) => {
+            items: sortedItems
+                .slice((+pageNumber - 1) * (+pageSize), (+pageNumber) * (+pageSize))
+                .map((User: { id: any; accountData: { login: any; email: any; createdAt: any; }; }) => {
                 return {
                     id: User.id,
                     login: User.accountData.login,

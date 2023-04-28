@@ -1,4 +1,3 @@
-
 //Business Layer
 
 
@@ -27,7 +26,8 @@ import "reflect-metadata";
 export class BlogBusinessLayer {
 
     constructor(@inject(BlogsRepository) protected blogsRepository: BlogsRepository,
-                @inject(PostsRepository) protected postsRepository: PostsRepository) {}
+                @inject(PostsRepository) protected postsRepository: PostsRepository) {
+    }
 
     //(1) this method transform all found data and returns them to router
     async allBlogs(searchNameTerm: any,
@@ -91,18 +91,15 @@ export class BlogBusinessLayer {
                            sortBy: any,
                            sortDirection: any): Promise<PostsTypeSchema | number> {
         const foundBlog = await this.blogsRepository.findBlogById(blogId)
-        if (foundBlog) {
-            const sortedItems = await this.postsRepository.allPostByBlogId(blogId, sortBy, sortDirection);
-            const quantityOfDocs = await PostModel.countDocuments({blogId: blogId})
-            return {
-                pagesCount: Math.ceil(quantityOfDocs / pageSize),
-                page: pageNumber,
-                pageSize: pageSize,
-                totalCount: quantityOfDocs,
-                items: sortedItems.slice((pageNumber - 1) * (pageSize), (pageNumber) * (pageSize))
-            }
-        } else {
-            return 404
+        if (!foundBlog) return 404
+        const sortedItems = await this.postsRepository.allPostByBlogId(blogId, sortBy, sortDirection);
+        const quantityOfDocs = await PostModel.countDocuments({blogId: blogId})
+        return {
+            pagesCount: Math.ceil(quantityOfDocs / pageSize),
+            page: pageNumber,
+            pageSize: pageSize,
+            totalCount: quantityOfDocs,
+            items: sortedItems.slice((pageNumber - 1) * (pageSize), (pageNumber) * (pageSize))
         }
     }
 

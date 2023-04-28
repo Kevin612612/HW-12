@@ -189,9 +189,7 @@ export class PostBusinessLayer {
             //return post to user with his assess if this user leave like or dislike
             if (assess) {
                 post.extendedLikesInfo.myStatus = assess //like or dislike
-            } //else {
-            //     post.extendedLikesInfo.myStatus = 'None' //didn't leave like or dislike
-            // }
+            }
         }
         return {
             id: post.id,
@@ -206,8 +204,8 @@ export class PostBusinessLayer {
                 dislikesCount: post.extendedLikesInfo.dislikesCount,
                 myStatus: post.extendedLikesInfo.myStatus,
                 newestLikes: post.extendedLikesInfo.newestLikes
-                    .sort((a, b) => b.login.localeCompare(a.login))
                     .slice(-3)
+                    .sort((a, b) => b.login.localeCompare(a.login))
                     .map(obj => {
                         return {
                             addedAt: obj.addedAt,

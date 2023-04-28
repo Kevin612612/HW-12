@@ -25,24 +25,20 @@ export class CommentsBusinessLayer {
         //check if it is your account
         const comment = await this.commentsRepository.findCommentById(commentId)
         if (!comment) return 404
-        if (comment.commentatorInfo.userId == userId) {
-            try {
-                const result = await this.commentsRepository.updateCommentById(commentId, content)
-            } catch (err: any) {
-                const validationErrors = []
-                if (err instanceof mongoose.Error.ValidationError) {
-                    for (const path in err.errors) {
-                        const error = err.errors[path].message
-                        validationErrors.push(error)
-                    }
+        if (comment.commentatorInfo.userId !== userId) return 403
+        try {
+            const result = await this.commentsRepository.updateCommentById(commentId, content)
+        } catch (err: any) {
+            const validationErrors = []
+            if (err instanceof mongoose.Error.ValidationError) {
+                for (const path in err.errors) {
+                    const error = err.errors[path].message
+                    validationErrors.push(error)
                 }
-                return validationErrors
             }
-            return 204
-        } else {
-            return 403
+            return validationErrors
         }
-
+        return 204
     }
 
 
@@ -50,16 +46,10 @@ export class CommentsBusinessLayer {
     async deleteComment(commentId: string, userId: string): Promise<number> {
         //check if it is your account
         const comment = await this.commentsRepository.findCommentById(commentId)
-        if (comment) {
-            if (comment.commentatorInfo.userId == userId) {
-                const result = await this.commentsRepository.deleteComment(commentId)
-                return 204
-            } else {
-                return 403
-            }
-        } else {
-            return 404
-        }
+        if (!comment) return 404
+        if (comment.commentatorInfo.userId !== userId) return 403
+        const result = await this.commentsRepository.deleteComment(commentId)
+        return 204
     }
 
 
@@ -67,31 +57,26 @@ export class CommentsBusinessLayer {
     async findCommentById(commentId: string, user: userDataModel): Promise<commentViewModel | number> {
         //find comment ->  delete myStatus if user unauthorized -> return to user or 404 if not found
         const comment = await this.commentsRepository.findCommentByIdDbType(commentId)
-        if (comment) {
-            //hide info about likes from unauthorized user
-            if (user == null) {
-                comment.likesInfo.myStatus = 'None'
-            }
-            if (user != null) {
-                //if user authorized -> find his like/dislike in userAssess Array in comment
-                const assess = comment.userAssess.find(obj => obj.userIdLike === user.id)?.assess ?? null
-                //return comment to user with his assess if this user leave like or dislike
-                if (assess) {
-                    comment.likesInfo.myStatus = assess //like or dislike
-                } else {
-                    comment.likesInfo.myStatus = 'None' //didn't leave like or dislike
-                }
+        if (!comment) return 404
+        //hide info about likes from unauthorized user
+        if (user == null) {
+            comment.likesInfo.myStatus = 'None'
+        }
+        if (user != null) {
+            //if user authorized -> find his like/dislike in userAssess Array in comment
+            const assess = comment.userAssess.find(obj => obj.userIdLike === user.id)?.assess ?? null
+            //return comment to user with his assess if this user leave like or dislike
+            if (assess) {
+                comment.likesInfo.myStatus = assess //like or dislike
             }
         }
-        return comment ?
-            {
+        return {
                 commentatorInfo: comment.commentatorInfo,
                 id: comment.id,
                 content: comment.content,
                 createdAt: comment.createdAt,
                 likesInfo: comment.likesInfo
             }
-            : 404
     }
 
     //(4) method change like status
