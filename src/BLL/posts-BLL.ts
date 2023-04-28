@@ -206,7 +206,7 @@ export class PostBusinessLayer {
                 dislikesCount: post.extendedLikesInfo.dislikesCount,
                 myStatus: post.extendedLikesInfo.myStatus,
                 newestLikes: post.extendedLikesInfo.newestLikes
-                    .sort((a, b) => parseInt(b.userId) - parseInt(a.userId))
+                    .sort((a, b) => b.login.localeCompare(a.login))
                     .slice(-3)
                     .map(obj => {
                         return {
