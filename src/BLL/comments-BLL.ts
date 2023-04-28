@@ -24,27 +24,25 @@ export class CommentsBusinessLayer {
     async updateCommentById(commentId: string, userId: string, content: string): Promise<number | string[]> {
         //check if it is your account
         const comment = await this.commentsRepository.findCommentById(commentId)
-        if (comment) {
-            if (comment.commentatorInfo.userId == userId) {
-                try {
-                    const result = await this.commentsRepository.updateCommentById(commentId, content)
-                } catch (err: any) {
-                    const validationErrors = []
-                    if (err instanceof mongoose.Error.ValidationError) {
-                        for (const path in err.errors) {
-                            const error = err.errors[path].message
-                            validationErrors.push(error)
-                        }
+        if (!comment) return 404
+        if (comment.commentatorInfo.userId == userId) {
+            try {
+                const result = await this.commentsRepository.updateCommentById(commentId, content)
+            } catch (err: any) {
+                const validationErrors = []
+                if (err instanceof mongoose.Error.ValidationError) {
+                    for (const path in err.errors) {
+                        const error = err.errors[path].message
+                        validationErrors.push(error)
                     }
-                    return validationErrors
                 }
-                return 204
-            } else {
-                return 403
+                return validationErrors
             }
+            return 204
         } else {
-            return 404
+            return 403
         }
+
     }
 
 
@@ -99,56 +97,53 @@ export class CommentsBusinessLayer {
     //(4) method change like status
     async changeLikeStatus(commentId: string, likeStatus: string, user: userDataModel): Promise<number> {
         const comment = await this.commentsRepository.findCommentByIdDbType(commentId)
-        if (comment) {
-            //change myStatus
-            const result = await this.commentsRepository.changeLikeStatus(commentId, likeStatus)
-            //check whether this user left assess to this comment
-            const userAssess = comment.userAssess.find(obj => obj.userIdLike === user.id)
-            //if he didn't leave comment -> add like/dislike/none to comment
-            if (!userAssess) {
-                if (likeStatus == 'Like') {
-                    const result1 = await this.commentsRepository.addLike(comment, user.id)
-                }
-                if (likeStatus == 'Dislike') {
-                    const result2 = await this.commentsRepository.addDislike(comment, user.id)
-                }
-                if (likeStatus == 'None') {
-                    const result3 = await this.commentsRepository.setNone(comment)
-                }
-            } else {
-                const assess = userAssess.assess //assess of this user
-                if (assess == 'Like' && likeStatus == 'Like') {
-                    //nothing
-                }
-                if (assess == 'Like' && likeStatus == 'Dislike') {
-                    //minus like and delete user from array then add addDislike()
-                    const result1 = await this.commentsRepository.deleteLike(comment, user.id)
-                    const result2 = await this.commentsRepository.addDislike(comment, user.id)
-                    //set my status None
-                    const result3 = await this.commentsRepository.setNone(comment)
-                }
-                if (assess == 'Like' && likeStatus == 'None') {
-                    //minus like and delete user from array
-                    const result1 = await this.commentsRepository.deleteLike(comment, user.id)
-                }
-                if (assess == 'Dislike' && likeStatus == 'Like') {
-                    //minus dislike and delete user from array then add addLike()
-                    const result1 = await this.commentsRepository.deleteDislike(comment, user.id)
-                    const result2 = await this.commentsRepository.addLike(comment, user.id)
-                    //set my status None
-                    const result3 = await this.commentsRepository.setNone(comment)
-                }
-                if (assess == 'Dislike' && likeStatus == 'Dislike') {
-                    //nothing
-                }
-                if (assess == 'Dislike' && likeStatus == 'None') {
-                    //minus dislike and delete user from array
-                    const result1 = await this.commentsRepository.deleteDislike(comment, user.id)
-                }
+        if (!comment) return 404
+        //change myStatus
+        const result = await this.commentsRepository.changeLikeStatus(commentId, likeStatus)
+        //check whether this user left assess to this comment
+        const userAssess = comment.userAssess.find(obj => obj.userIdLike === user.id)
+        //if he didn't leave comment -> add like/dislike/none to comment
+        if (!userAssess) {
+            if (likeStatus == 'Like') {
+                const result1 = await this.commentsRepository.addLike(comment, user.id)
             }
-            return 204
+            if (likeStatus == 'Dislike') {
+                const result2 = await this.commentsRepository.addDislike(comment, user.id)
+            }
+            if (likeStatus == 'None') {
+                const result3 = await this.commentsRepository.setNone(comment)
+            }
         } else {
-            return 404
+            const assess = userAssess.assess //assess of this user
+            if (assess == 'Like' && likeStatus == 'Like') {
+                //nothing
+            }
+            if (assess == 'Like' && likeStatus == 'Dislike') {
+                //minus like and delete user from array then add addDislike()
+                const result1 = await this.commentsRepository.deleteLike(comment, user.id)
+                const result2 = await this.commentsRepository.addDislike(comment, user.id)
+                //set my status None
+                const result3 = await this.commentsRepository.setNone(comment)
+            }
+            if (assess == 'Like' && likeStatus == 'None') {
+                //minus like and delete user from array
+                const result1 = await this.commentsRepository.deleteLike(comment, user.id)
+            }
+            if (assess == 'Dislike' && likeStatus == 'Like') {
+                //minus dislike and delete user from array then add addLike()
+                const result1 = await this.commentsRepository.deleteDislike(comment, user.id)
+                const result2 = await this.commentsRepository.addLike(comment, user.id)
+                //set my status None
+                const result3 = await this.commentsRepository.setNone(comment)
+            }
+            if (assess == 'Dislike' && likeStatus == 'Dislike') {
+                //nothing
+            }
+            if (assess == 'Dislike' && likeStatus == 'None') {
+                //minus dislike and delete user from array
+                const result1 = await this.commentsRepository.deleteDislike(comment, user.id)
+            }
         }
+        return 204
     }
 }

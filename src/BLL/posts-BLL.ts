@@ -47,90 +47,83 @@ export class PostBusinessLayer {
                               sortDirection: any,
                               userId: string): Promise<CommentsTypeSchema | number> {
         const foundPost = await this.postsRepository.findPostById(postId)
+        if (!foundPost) return 404
 
-        if (foundPost) {
-            const allDataComments = await this.commentsRepository.allComments(postId, sortBy, sortDirection)
-            const quantityOfDocs = await CommentModel.where({postId: postId}).countDocuments()
-            //filter allDataComments and return array that depends on which user send get request
-            const sortedItems = allDataComments.map(obj => {
-                if (obj.userAssess.find(el => el.userIdLike === userId)) {
-                    return {
-                        id: obj.id,
-                        content: obj.content,
-                        commentatorInfo: obj.commentatorInfo,
-                        createdAt: obj.createdAt,
-                        likesInfo: {
-                            likesCount: obj.likesInfo.likesCount,
-                            dislikesCount: obj.likesInfo.dislikesCount,
-                            myStatus: obj.userAssess.find(el => el.userIdLike === userId)?.assess ?? 'None',
-                        }
-                    }
-                } else {
-                    return {
-                        id: obj.id,
-                        content: obj.content,
-                        commentatorInfo: obj.commentatorInfo,
-                        createdAt: obj.createdAt,
-                        likesInfo: {
-                            likesCount: obj.likesInfo.likesCount,
-                            dislikesCount: obj.likesInfo.dislikesCount,
-                            myStatus: 'None',
-                        }
+        const allDataComments = await this.commentsRepository.allComments(postId, sortBy, sortDirection)
+        const quantityOfDocs = await CommentModel.where({postId: postId}).countDocuments()
+        //filter allDataComments and return array that depends on which user send get request
+        const sortedItems = allDataComments.map(obj => {
+            if (obj.userAssess.find(el => el.userIdLike === userId)) {
+                return {
+                    id: obj.id,
+                    content: obj.content,
+                    commentatorInfo: obj.commentatorInfo,
+                    createdAt: obj.createdAt,
+                    likesInfo: {
+                        likesCount: obj.likesInfo.likesCount,
+                        dislikesCount: obj.likesInfo.dislikesCount,
+                        myStatus: obj.userAssess.find(el => el.userIdLike === userId)?.assess ?? 'None',
                     }
                 }
-            })//if user left comment return his assess as myStatus
-
-            return {
-                pagesCount: Math.ceil(quantityOfDocs / +pageSize),
-                page: +pageNumber,
-                pageSize: +pageSize,
-                totalCount: quantityOfDocs,
-                items: sortedItems.slice((+pageNumber - 1) * (+pageSize), (+pageNumber) * (+pageSize))
+            } else {
+                return {
+                    id: obj.id,
+                    content: obj.content,
+                    commentatorInfo: obj.commentatorInfo,
+                    createdAt: obj.createdAt,
+                    likesInfo: {
+                        likesCount: obj.likesInfo.likesCount,
+                        dislikesCount: obj.likesInfo.dislikesCount,
+                        myStatus: 'None',
+                    }
+                }
             }
-        } else {
-            return 404
+        })//if user left comment return his assess as myStatus
+
+        return {
+            pagesCount: Math.ceil(quantityOfDocs / +pageSize),
+            page: +pageNumber,
+            pageSize: +pageSize,
+            totalCount: quantityOfDocs,
+            items: sortedItems.slice((+pageNumber - 1) * (+pageSize), (+pageNumber) * (+pageSize))
         }
     }
 
 
     //(2) creates new comment by postId
     async newPostedCommentByPostId(postId: string, content: string, userId: string, userLogin: string): Promise<commentViewModel | number | string[]> {
-        const foundPost = await this.postsRepository.findPostById(postId) // define postId
-        // if post exists -> create comment
-        if (foundPost) {
-            //create new comment
-            let newComment = new Comment() //empty comment
-            newComment = await newComment.addAsyncParams(content, userId, userLogin, postId) // fill user with async params
-            // put this new comment into db
-            try {
-                const result = await this.commentsRepository.newPostedComment(newComment)
-            } catch (err: any) {
-                const validationErrors = []
-                if (err instanceof mongoose.Error.ValidationError) {
-                    for (const path in err.errors) {
-                        const error = err.errors[path].message
-                        validationErrors.push(error)
-                    }
+        const foundPost = await this.postsRepository.findPostById(postId)
+        if (!foundPost) return 404
+        //create new comment
+        let newComment = new Comment() //empty comment
+        newComment = await newComment.addAsyncParams(content, userId, userLogin, postId) // fill user with async params
+        // put this new comment into db
+        try {
+            const result = await this.commentsRepository.newPostedComment(newComment)
+        } catch (err: any) {
+            const validationErrors = []
+            if (err instanceof mongoose.Error.ValidationError) {
+                for (const path in err.errors) {
+                    const error = err.errors[path].message
+                    validationErrors.push(error)
                 }
-                return validationErrors
             }
+            return validationErrors
+        }
 
-            return {
-                id: newComment.id,
-                content: newComment.content,
-                commentatorInfo: {
-                    userId: newComment.commentatorInfo.userId,
-                    userLogin: newComment.commentatorInfo.userLogin,
-                },
-                createdAt: newComment.createdAt,
-                likesInfo: {
-                    dislikesCount: newComment.likesInfo.dislikesCount,
-                    likesCount: newComment.likesInfo.likesCount,
-                    myStatus: newComment.likesInfo.myStatus,
-                },
-            }
-        } else {
-            return 404
+        return {
+            id: newComment.id,
+            content: newComment.content,
+            commentatorInfo: {
+                userId: newComment.commentatorInfo.userId,
+                userLogin: newComment.commentatorInfo.userLogin,
+            },
+            createdAt: newComment.createdAt,
+            likesInfo: {
+                dislikesCount: newComment.likesInfo.dislikesCount,
+                likesCount: newComment.likesInfo.likesCount,
+                myStatus: newComment.likesInfo.myStatus,
+            },
         }
     }
 
@@ -196,9 +189,9 @@ export class PostBusinessLayer {
             //return post to user with his assess if this user leave like or dislike
             if (assess) {
                 post.extendedLikesInfo.myStatus = assess //like or dislike
-            } else {
-                post.extendedLikesInfo.myStatus = 'None' //didn't leave like or dislike
-            }
+            } //else {
+            //     post.extendedLikesInfo.myStatus = 'None' //didn't leave like or dislike
+            // }
         }
         return {
             id: post.id,
@@ -208,7 +201,13 @@ export class PostBusinessLayer {
             blogId: post.blogId,
             blogName: post.blogName,
             createdAt: post.createdAt,
-            extendedLikesInfo: post.extendedLikesInfo,
+            extendedLikesInfo: {
+                likesCount: post.extendedLikesInfo.likesCount,
+                dislikesCount: post.extendedLikesInfo.dislikesCount,
+                myStatus: post.extendedLikesInfo.myStatus,
+                newestLikes: post.extendedLikesInfo.newestLikes
+                    .sort((a, b) => Date.parse(b.addedAt) - Date.parse(a.addedAt))
+                    .slice(-3)},
         }
     }
 
