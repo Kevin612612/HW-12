@@ -13,7 +13,7 @@
 
 import {
     postViewModel,
-    PostsTypeSchema, postDataModel
+    PostsTypeSchema
 } from "../types/posts";
 import {
     CommentsTypeSchema,
@@ -183,10 +183,33 @@ export class PostBusinessLayer {
 
 
     //(5) method take post by postId
-    async findPostById(postId: string): Promise<postViewModel | number> {
-        const post = await this.postsRepository.findPostById(postId)
+    async findPostById(postId: string, user: userDataModel): Promise<postViewModel | number> {
+        const post = await this.postsRepository.findPostByIdDbType(postId)
         if (!post) return 404
-        return post
+        //hide info about likes from unauthorized user
+        if (user == null) {
+            post.extendedLikesInfo.myStatus = 'None'
+        }
+        if (user != null) {
+            //if user authorized -> find his like/dislike in userAssess Array in post
+            const assess = post.userAssess.find(obj => obj.userIdLike === user.id)?.assess ?? null
+            //return post to user with his assess if this user leave like or dislike
+            if (assess) {
+                post.extendedLikesInfo.myStatus = assess //like or dislike
+            } else {
+                post.extendedLikesInfo.myStatus = 'None' //didn't leave like or dislike
+            }
+        }
+        return {
+            id : post.id,
+            title : post.title,
+            shortDescription : post.shortDescription,
+            content : post.content,
+            blogId : post.blogId,
+            blogName : post.blogName,
+            createdAt : post.createdAt,
+            extendedLikesInfo : post.extendedLikesInfo,
+        }
     }
 
 

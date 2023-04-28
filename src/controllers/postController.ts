@@ -53,8 +53,9 @@ export class PostController {
     async getPostById(req: Request, res: Response) {
         //INPUT
         const postId = req.params.postId
+        const user = req.user
         //BLL
-        const post = await this.postBusinessLayer.findPostById(postId)
+        const post = await this.postBusinessLayer.findPostById(postId, user)
         //RETURN
         res.status(200).send(post)
     }

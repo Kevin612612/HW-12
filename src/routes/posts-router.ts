@@ -71,6 +71,7 @@ postsRouter.post('/',
 //(5) get post by postId
 postsRouter.get('/:postId',
     postIdValidation,
+    checkAuthMiddleWare, //check authorization and put user into request
     collectionErrors, // should be the last middleware
     postController.getPostById.bind(postController)
 )
