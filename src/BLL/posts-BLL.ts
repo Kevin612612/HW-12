@@ -195,6 +195,7 @@ export class PostBusinessLayer {
                 post.extendedLikesInfo.myStatus = 'None'
             }
         }
+        
         //return viewModel converted from dataModel
         return {
             id: post.id,

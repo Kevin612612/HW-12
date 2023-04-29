@@ -1,4 +1,3 @@
-
 import {app} from "./setting";
 import {runDb} from "./repositories/mogoose";
 
