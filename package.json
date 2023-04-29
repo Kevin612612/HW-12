@@ -55,5 +55,7 @@
     "ts-node": "^10.9.1",
     "typescript": "^4.9.4",
     "yarn": "^1.22.19"
-  }
+  },
+  "repository": "https://github.com/Kevin612612/HW-12.git",
+  "author": "antonlazukin <kevin6121991@gmail.com>"
 }

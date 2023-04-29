@@ -65,9 +65,11 @@ export class CommentsBusinessLayer {
         if (user != null) {
             //if user authorized -> find his like/dislike in userAssess Array in comment
             const assess = comment.userAssess.find(obj => obj.userIdLike === user.id)?.assess ?? null
-            //return comment to user with his assess if this user leave like or dislike
+            //return comment to user with his assess if this user left like or dislike
             if (assess) {
                 comment.likesInfo.myStatus = assess //like or dislike
+            } else {
+                comment.likesInfo.myStatus = 'None'
             }
         }
         return {

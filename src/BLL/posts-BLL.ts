@@ -177,20 +177,25 @@ export class PostBusinessLayer {
 
     //(5) method take post by postId
     async findPostById(postId: string, user: userDataModel): Promise<postViewModel | number> {
+        //find post
         const post = await this.postsRepository.findPostByIdDbType(postId)
         if (!post) return 404
         //hide info about likes from unauthorized user
         if (user == null) {
             post.extendedLikesInfo.myStatus = 'None'
         }
+        //if user authorized
         if (user != null) {
             //if user authorized -> find his like/dislike in userAssess Array in post
-            const assess = post.userAssess.find(obj => obj.userIdLike === user.id)?.assess ?? null
+            const assess = post.userAssess.find(obj => obj.userIdLike === user.id)?.assess
             //return post to user with his assess if this user leave like or dislike
             if (assess) {
                 post.extendedLikesInfo.myStatus = assess //like or dislike
+            } else {
+                post.extendedLikesInfo.myStatus = 'None'
             }
         }
+        //return viewModel converted from dataModel
         return {
             id: post.id,
             title: post.title,
@@ -249,9 +254,10 @@ export class PostBusinessLayer {
 
     //(8) method change like status
     async changeLikeStatus(postId: string, likeStatus: string, user: userDataModel): Promise<number> {
+        //find post
         const post = await this.postsRepository.findPostByIdDbType(postId)
         if (!post) return 404
-        //change myStatus
+        //change myStatus / myStatus = current assess
         const result = await this.postsRepository.changeLikeStatus(postId, likeStatus)
         //check whether this user left assess to this post
         const userAssess = post.userAssess.find(obj => obj.userIdLike === user.id)
@@ -267,7 +273,8 @@ export class PostBusinessLayer {
                 const result3 = await this.postsRepository.setNone(post)
             }
         } else {
-            const assess = userAssess.assess //assess of this user
+            //assess of this user
+            const assess = userAssess.assess 
             if (assess == 'Like' && likeStatus == 'Like') {
                 //nothing
             }
