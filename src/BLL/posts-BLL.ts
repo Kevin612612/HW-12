@@ -152,6 +152,7 @@ export class PostBusinessLayer {
                                     userId: obj.userId,
                                 }
                             })
+                            .reverse()
                     },
                     id: post.id,
                     title: post.title,
@@ -177,6 +178,7 @@ export class PostBusinessLayer {
                                     userId: obj.userId,
                                 }
                             })
+                            .reverse()
                     },
                     id: post.id,
                     title: post.title,
