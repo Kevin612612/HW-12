@@ -144,7 +144,7 @@ export class PostBusinessLayer {
                         myStatus: post.userAssess.find(el => el.userIdLike === userId)?.assess || 'None',
                         newestLikes: post.extendedLikesInfo.newestLikes
                             .slice(-3)
-                            .sort((a, b) => b.login.localeCompare(a.login))
+                            // .sort((a, b) => b.login.localeCompare(a.login))
                             .map(obj => {
                                 return {
                                     addedAt: obj.addedAt,
@@ -169,7 +169,7 @@ export class PostBusinessLayer {
                         myStatus: 'None',
                         newestLikes: post.extendedLikesInfo.newestLikes
                             .slice(-3)
-                            .sort((a, b) => b.login.localeCompare(a.login))
+                            // .sort((a, b) => b.login.localeCompare(a.login))
                             .map(obj => {
                                 return {
                                     addedAt: obj.addedAt,
