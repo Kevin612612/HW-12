@@ -138,13 +138,6 @@ export class PostBusinessLayer {
         const sortedItems = allDataPosts.map(post => {
             if (post.userAssess.find(el => el.userIdLike === userId)) { //if current user exist in userAsses array
                 return {
-                    id: post.id,
-                    title: post.title,
-                    shortDescription: post.shortDescription,
-                    content: post.content,
-                    blogId: post.blogId,
-                    blogName: post.blogName,
-                    createdAt: post.createdAt,
                     extendedLikesInfo: {
                         likesCount: post.extendedLikesInfo.likesCount,
                         dislikesCount: post.extendedLikesInfo.dislikesCount,
@@ -159,10 +152,7 @@ export class PostBusinessLayer {
                                     userId: obj.userId,
                                 }
                             })
-                    }
-                }
-            } else {
-                return {
+                    },
                     id: post.id,
                     title: post.title,
                     shortDescription: post.shortDescription,
@@ -170,6 +160,9 @@ export class PostBusinessLayer {
                     blogId: post.blogId,
                     blogName: post.blogName,
                     createdAt: post.createdAt,
+                }
+            } else {
+                return {
                     extendedLikesInfo: {
                         likesCount: post.extendedLikesInfo.likesCount,
                         dislikesCount: post.extendedLikesInfo.dislikesCount,
@@ -184,7 +177,14 @@ export class PostBusinessLayer {
                                     userId: obj.userId,
                                 }
                             })
-                    }
+                    },
+                    id: post.id,
+                    title: post.title,
+                    shortDescription: post.shortDescription,
+                    content: post.content,
+                    blogId: post.blogId,
+                    blogName: post.blogName,
+                    createdAt: post.createdAt,
                 }
             }
         })
