@@ -52,6 +52,7 @@ postsRouter.post('/:postId/comments',
 
 //(3) returns all posts with paging
 postsRouter.get('/',
+    checkAuthMiddleWare,
     postController.getAllPosts.bind(postController)
 )
 

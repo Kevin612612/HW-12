@@ -20,7 +20,7 @@ import {userDataModel} from "../types/users";
 export class PostsRepository {
 
     //(1) method returns posts by blogID
-    async allPosts(sortBy: any, sortDirection: any): Promise<postViewModel[]> {
+    async allPosts(sortBy: any, sortDirection: any): Promise<postDataModel[]> {
         const order = sortDirection === 'asc' ? 1 : -1; // порядок сортировки
         return PostModel
             .find({}, '-_id')

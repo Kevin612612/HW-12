@@ -35,8 +35,9 @@ export class PostController {
     async getAllPosts(req: Request, res: Response) {
         //INPUT
         const {pageNumber = 1, pageSize = 10, sortBy = "createdAt", sortDirection = "desc"} = req.query
+        const userId = req.user?.id
         //BLL
-        const allPosts = await this.postBusinessLayer.allPosts(pageNumber, pageSize, sortBy, sortDirection)
+        const allPosts = await this.postBusinessLayer.allPosts(pageNumber, pageSize, sortBy, sortDirection, userId)
         //RETURN
         res.status(200).send(allPosts)
     }

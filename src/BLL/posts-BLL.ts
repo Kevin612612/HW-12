@@ -11,10 +11,7 @@
 //(8) changeLikeStatus
 
 
-import {
-    postViewModel,
-    PostsTypeSchema
-} from "../types/posts";
+import {postViewModel, PostsTypeSchema} from "../types/posts";
 import {
     CommentsTypeSchema,
     commentViewModel
@@ -132,10 +129,65 @@ export class PostBusinessLayer {
     async allPosts(pageNumber: any,
                    pageSize: any,
                    sortBy: any,
-                   sortDirection: any): Promise<PostsTypeSchema | number> {
+                   sortDirection: any,
+                   userId: string): Promise<PostsTypeSchema | number> {
 
-        const sortedItems = await this.postsRepository.allPosts(sortBy, sortDirection);
+        const allDataPosts = await this.postsRepository.allPosts(sortBy, sortDirection)
         const quantityOfDocs = await PostModel.where({}).countDocuments()
+        //filter allDataPosts and return array that depends on which user send get request
+        const sortedItems = allDataPosts.map(post => {
+            if (post.userAssess.find(el => el.userIdLike === userId)) { //if current user exist in userAsses array
+                return {
+                    id: post.id,
+                    title: post.title,
+                    shortDescription: post.shortDescription,
+                    content: post.content,
+                    blogId: post.blogId,
+                    blogName: post.blogName,
+                    createdAt: post.createdAt,
+                    extendedLikesInfo: {
+                        likesCount: post.extendedLikesInfo.likesCount,
+                        dislikesCount: post.extendedLikesInfo.dislikesCount,
+                        myStatus: post.userAssess.find(el => el.userIdLike === userId)?.assess || 'None',
+                        newestLikes: post.extendedLikesInfo.newestLikes
+                            .slice(-3)
+                            .sort((a, b) => b.login.localeCompare(a.login))
+                            .map(obj => {
+                                return {
+                                    addedAt: obj.addedAt,
+                                    login: obj.login,
+                                    userId: obj.userId,
+                                }
+                            })
+                    }
+                }
+            } else {
+                return {
+                    id: post.id,
+                    title: post.title,
+                    shortDescription: post.shortDescription,
+                    content: post.content,
+                    blogId: post.blogId,
+                    blogName: post.blogName,
+                    createdAt: post.createdAt,
+                    extendedLikesInfo: {
+                        likesCount: post.extendedLikesInfo.likesCount,
+                        dislikesCount: post.extendedLikesInfo.dislikesCount,
+                        myStatus: 'None',
+                        newestLikes: post.extendedLikesInfo.newestLikes
+                            .slice(-3)
+                            .sort((a, b) => b.login.localeCompare(a.login))
+                            .map(obj => {
+                                return {
+                                    addedAt: obj.addedAt,
+                                    login: obj.login,
+                                    userId: obj.userId,
+                                }
+                            })
+                    }
+                }
+            }
+        })
 
         return {
             pagesCount: Math.ceil(quantityOfDocs / pageSize),
