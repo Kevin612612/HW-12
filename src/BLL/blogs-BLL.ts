@@ -89,11 +89,68 @@ export class BlogBusinessLayer {
                            pageNumber: any,
                            pageSize: any,
                            sortBy: any,
-                           sortDirection: any): Promise<PostsTypeSchema | number> {
+                           sortDirection: any,
+                           userId: string): Promise<PostsTypeSchema | number> {
         const foundBlog = await this.blogsRepository.findBlogById(blogId)
         if (!foundBlog) return 404
-        const sortedItems = await this.postsRepository.allPostByBlogId(blogId, sortBy, sortDirection);
+
+        const allDataPosts = await this.postsRepository.allPostByBlogId(blogId, sortBy, sortDirection);
         const quantityOfDocs = await PostModel.countDocuments({blogId: blogId})
+        //filter allDataPosts and return array that depends on which user send get request
+        const sortedItems = allDataPosts.map(post => {
+            if (post.userAssess.find(el => el.userIdLike === userId)) { //if current user exist in userAsses array
+                return {
+                    extendedLikesInfo: {
+                        likesCount: post.extendedLikesInfo.likesCount,
+                        dislikesCount: post.extendedLikesInfo.dislikesCount,
+                        myStatus: post.userAssess.find(el => el.userIdLike === userId)?.assess || 'None',
+                        newestLikes: post.extendedLikesInfo.newestLikes
+                            .slice(-3)
+                            .map(obj => {
+                                return {
+                                    addedAt: obj.addedAt,
+                                    login: obj.login,
+                                    userId: obj.userId,
+                                }
+                            })
+                            .reverse()
+                    },
+                    id: post.id,
+                    title: post.title,
+                    shortDescription: post.shortDescription,
+                    content: post.content,
+                    blogId: post.blogId,
+                    blogName: post.blogName,
+                    createdAt: post.createdAt,
+                }
+            } else {
+                return {
+                    extendedLikesInfo: {
+                        likesCount: post.extendedLikesInfo.likesCount,
+                        dislikesCount: post.extendedLikesInfo.dislikesCount,
+                        myStatus: 'None',
+                        newestLikes: post.extendedLikesInfo.newestLikes
+                            .slice(-3)
+                            .map(obj => {
+                                return {
+                                    addedAt: obj.addedAt,
+                                    login: obj.login,
+                                    userId: obj.userId,
+                                }
+                            })
+                            .reverse()
+                    },
+                    id: post.id,
+                    title: post.title,
+                    shortDescription: post.shortDescription,
+                    content: post.content,
+                    blogId: post.blogId,
+                    blogName: post.blogName,
+                    createdAt: post.createdAt,
+                }
+            }
+        })
+        
         return {
             pagesCount: Math.ceil(quantityOfDocs / pageSize),
             page: pageNumber,

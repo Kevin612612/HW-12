@@ -30,7 +30,7 @@ export class PostsRepository {
 
 
     //(2) method returns all posts by blogID
-    async allPostByBlogId(blogId: any, sortBy: any, sortDirection: any): Promise<postViewModel[]> {
+    async allPostByBlogId(blogId: any, sortBy: any, sortDirection: any): Promise<postDataModel[]> {
         const order = sortDirection === 'asc' ? 1 : -1; // порядок сортировки
         return PostModel
             .find({blogId: blogId}, '-_id')

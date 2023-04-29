@@ -19,7 +19,7 @@ import {
     contentValidation,
     blogIdValidationInParams, collectionErrors
 } from "../middleware/input-validation-middleware";
-import {authorization} from "../middleware/authorization-middleware";
+import {authMiddleWare, authorization} from "../middleware/authorization-middleware";
 import {container} from "../composition-root";
 import {BlogController} from "../controllers/blogController";
 import "reflect-metadata";
@@ -49,6 +49,7 @@ blogsRouter.post('/',
 
 //(3) returns all posts by specified blog
 blogsRouter.get('/:blogId/posts',
+    authMiddleWare,
     blogIdValidationInParams,
     //todo: redevelop blogIdValidationInParams
     collectionErrors, // should be the last middleware

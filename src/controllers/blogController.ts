@@ -41,8 +41,9 @@ export class BlogController {
         //INPUT
         const {pageNumber = 1, pageSize = 10, sortBy = "createdAt", sortDirection = "desc"} = req.query;
         const blogId = req.params.blogId || "1"
+        const userId = req.user?.id
         //BLL
-        const posts = await this.blogBusinessLayer.allPostsByBlogId(blogId, pageNumber, pageSize, sortBy, sortDirection)
+        const posts = await this.blogBusinessLayer.allPostsByBlogId(blogId, pageNumber, pageSize, sortBy, sortDirection, userId)
         //RETURN
         res.status(200).send(posts)
     }
